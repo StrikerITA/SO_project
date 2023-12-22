@@ -12,5 +12,5 @@ int main(int argc, char const *argv[]){
 }
 
 void signal_split(){
-    // * send signal to atom (NOT master.c)
+    // * send signal to Master, it send signal to Atom
 }
