@@ -17,7 +17,7 @@ pid_t split(int N_ATOM){
 	father_pid = getppid();
 
     printf("PID=%6d, father_PID=%6d, child_PID=%d\n", pid, father_pid, child_pid);
-    return father_pid;
+    return child_pid;
 }
 
 // Signal Handling
@@ -33,7 +33,7 @@ int main(int argc, char const *argv[]){
     int N_ATOM = atoi(argv[1]); //numero atomico
     int test_num_atom = 0;
     
-    pid_t pid, father_pid, child_pid;
+    pid_t pid;
     printf("Num Atomico: %d\n", N_ATOM);
 
     // Signal Handling
@@ -48,11 +48,13 @@ int main(int argc, char const *argv[]){
     }
     
     // TODO: scissione atomo con una fork
-    father_pid = split(N_ATOM);
-
-    if (child_pid == 0) {
+    pid = split(N_ATOM);
+    
+    if(pid < 0){
+        perror("fork failed");
+    }else if (pid == 0) {
         // Codice eseguito dal processo figlio
-        printf("Processo figlio avviato. PID: %d\n", getpid());
+        printf("Processo figlio avviato. PID: %d\n\n", getpid());
 
         // add some code
 
@@ -60,9 +62,9 @@ int main(int argc, char const *argv[]){
         kill(getppid(), SIGUSR1);
 
         exit(EXIT_SUCCESS);
-    } else {
+    } else if (pid > 0){
         // Father's Code
-        printf("Processo padre. PID: %d\n", getpid());
+        printf("Processo padre. PID: %d\n\n", getpid());
 
         // waiting signals from child
         printf("Il processo padre attende il segnale...\n");
