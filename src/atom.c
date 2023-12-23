@@ -23,18 +23,27 @@ pid_t split(int N_ATOM){
 // Signal Handling
 void signal_handler(int signal) {
     if (signal == SIGUSR1) {
-        printf("Ricevuto SIGUSR1 dal processo figlio\n");
+        printf("Ricevuto SIGUSR1 dal processo figlio\n\n");
     }
 }
 
 int calc_energy_free(int N_ATOM_P, int N_ATOM_C);
 
 int main(int argc, char const *argv[]){
-    int N_ATOM = atoi(argv[1]); //numero atomico
-    int test_num_atom = 0;
-    
     pid_t pid;
-    printf("Num Atomico: %d\n", N_ATOM);
+    int N_ATOM = atoi(argv[1]); //numero atomico
+    N_ATOM = 10;
+    int test_num_atom = 0, len = 0;
+    char* str = "\n";
+    
+
+    str = "Num Atomico: %d\n";
+    len = snprintf(str, sizeof(str), "%d", N_ATOM);
+    
+    write(STDOUT_FILENO, str, len);
+    
+    //printf("Num Atomico: %d\n", N_ATOM);
+    
 
     // Signal Handling
     if (signal(SIGUSR1, signal_handler) == SIG_ERR) {
@@ -54,7 +63,7 @@ int main(int argc, char const *argv[]){
         perror("fork failed");
     }else if (pid == 0) {
         // Codice eseguito dal processo figlio
-        printf("Processo figlio avviato. PID: %d\n\n", getpid());
+        printf("Processo figlio avviato. PID: %d\n", getpid());
 
         // add some code
 
@@ -64,10 +73,10 @@ int main(int argc, char const *argv[]){
         exit(EXIT_SUCCESS);
     } else if (pid > 0){
         // Father's Code
-        printf("Processo padre. PID: %d\n\n", getpid());
+        printf("Processo padre. PID: %d\n", getpid());
 
         // waiting signals from child
-        printf("Il processo padre attende il segnale...\n");
+        printf("Il processo padre attende il segnale...\n\n");
         pause();  //waiting
 
         printf("Il processo padre ha ricevuto il segnale. Termina.\n");

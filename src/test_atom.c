@@ -3,8 +3,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-int main(int argc, char const *argv[]){
-    printf("Avvio test_atomo \n");
+void new_atom(){
     // Percorso del programma da eseguire
     char *programPath = "./atom.out";
 
@@ -16,10 +15,23 @@ int main(int argc, char const *argv[]){
         perror("Errore nell'esecuzione del programma");
         exit(EXIT_FAILURE);
     }
+}
 
-    // Questo codice non verrà mai eseguito a causa della chiamata a execvp
-    printf("Questo messaggio non verrà mai stampato.\n");
+void test_system(){
+    // Percorso del programma da eseguire
+    char *programPath = "./atom.out";
 
+    // Esegui atom passando i dati con args
+    if (system(programPath) == -1) {
+        perror("Errore nell'esecuzione del programma");
+        exit(EXIT_FAILURE);
+    }
+}
+
+int main(int argc, char const *argv[]){
+    printf("Avvio test_atomo \n");
     
+    //new_atom();
+    test_system();
     return 0;
 }
