@@ -1,0 +1,2 @@
+- Sostituire i printf con i write
+- Usare kill -9 PID per terminare un processo
