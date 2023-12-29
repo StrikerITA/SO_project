@@ -1,2 +1,7 @@
+Gestione della scissione(activator-atom)
+  L'attivatore crea un semaforo e una shmem dove ci scrivera il numero di atomi da scindere, esso prima di scrivere nella shmem blocca le risorse nel semaforo, scrive e poi le libera di nuovo.
+  L'atomo attraverso un semaforo fara accesso a questa memoria, la diminuira di 1 e fara la scissione.
+  
+
 - Sostituire i printf con i write
 - Usare kill -9 PID per terminare un processo
