@@ -7,7 +7,8 @@
 #include <math.h>
 
 #define MIN_N_ATOM 2
-// * Sostituire printf con write
+// TODO:  Sostituire printf con write
+// ! Avvio test_atomo 
 
 // New Atom
 pid_t split(int N_ATOM){
@@ -16,7 +17,10 @@ pid_t split(int N_ATOM){
 	pid = getpid();
 	father_pid = getppid();
 
-    printf("PID=%6d, father_PID=%6d, child_PID=%d\n", pid, father_pid, child_pid);
+    char str[100];
+    int len = snprintf(str, sizeof(str), "PID=%6d, father_PID=%6d, child_PID=%d\n", pid, father_pid, child_pid);
+    write(STDOUT_FILENO, str, len);
+    
     return child_pid;
 }
 
@@ -32,18 +36,12 @@ int calc_energy_free(int N_ATOM_P, int N_ATOM_C);
 int main(int argc, char const *argv[]){
     pid_t pid;
     int N_ATOM = atoi(argv[1]); //numero atomico
-    N_ATOM = 10;
-    int test_num_atom = 0, len = 0;
-    char* str = "\n";
+    //N_ATOM = 10;
+    int test_num_atom = 0;
     
-
-    str = "Num Atomico: %d\n";
-    len = snprintf(str, sizeof(str), "%d", N_ATOM);
-    
+    char str[100];
+    int len = snprintf(str, sizeof(str), "Num atomico %d\n", N_ATOM);
     write(STDOUT_FILENO, str, len);
-    
-    //printf("Num Atomico: %d\n", N_ATOM);
-    
 
     // Signal Handling
     if (signal(SIGUSR1, signal_handler) == SIG_ERR) {
@@ -63,7 +61,10 @@ int main(int argc, char const *argv[]){
         perror("fork failed");
     }else if (pid == 0) {
         // Codice eseguito dal processo figlio
-        printf("Processo figlio avviato. PID: %d\n", getpid());
+
+        char str[100];
+        int len = snprintf(str, sizeof(str), "Processo figlio avviato. PID: %d\n", getpid());
+        write(STDOUT_FILENO, str, len);
 
         // add some code
 
@@ -95,5 +96,5 @@ int main(int argc, char const *argv[]){
 
     // TODO: Calcolo ENERGY_FREE
 
-
+    return 0;
 }
