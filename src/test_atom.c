@@ -8,6 +8,7 @@ void new_atom(char *argv[]){
     char *programPath = "./atom.out";
 
     // Argomenti del programma
+    //char *args[] = {"atom", "10"};
     printf("%s", argv[1]);
 
     // Esegui atom passando i dati con args
