@@ -13,6 +13,15 @@ void signal_handler(int signo) {
 }
 
 int main(int argc, char const *argv[]){
-    /* code */
+    /* CREAZIONE STRUTTUE IPC
+    - Memoria condivisa
+    - Struttura semafori:
+        attivatore
+        statistiche
+        semaforo ready per processi
+        semaforo ready per master
+
+    *resto del codice del master*
+    */
     return 0;
 }
