@@ -1,9 +1,5 @@
 #include "atom.h"
 
-#define MIN_N_ATOMICO 2
-// TODO:  Sostituire printf con write
-// ! Avvio test_atomo 
-// ! zsh: bus error  ./test.out
 char buffer[100];
 int str = 0;
 
@@ -47,7 +43,8 @@ pid_t split(char const *argv[]){
 // Signal Handling
 void signal_handler(int signal) {
     if (signal == SIGUSR1) {
-        printf("Ricevuto SIGUSR1 dal processo figlio\n\n");
+        str = snprintf(buffer, sizeof(buffer), "Ricevuto SIGUSR1 dal processo figlio\n\n");
+        write(STDOUT_FILENO, buffer, str);
     }
 }
 
@@ -62,7 +59,6 @@ int calc_energy_free(int N_ATOM_P, int N_ATOM_C);
 int main(int argc, char const *argv[]){
     pid_t pid;
     int N_ATOM = atoi(argv[1]); //numero atomico
-    //N_ATOM = 10;
     int test_num_atom = 0;
     
     int str = snprintf(buffer, sizeof(buffer), "Num atomico %d\n", N_ATOM);
@@ -75,7 +71,7 @@ int main(int argc, char const *argv[]){
     }
 
     if (N_ATOM < MIN_N_ATOMICO){
-        //add +1 to scorie
+        // TODO: add +1 to scorie
         exit(EXIT_FAILURE);
     }
     
@@ -124,10 +120,6 @@ int main(int argc, char const *argv[]){
 
         exit(EXIT_SUCCESS);
     }
-    
-    // TODO: numero atomico con generazione casuale
-    test_num_atom = rand_num_atom(MIN_N_ATOMICO, N_ATOM);
-    printf("%d", test_num_atom);
 
     // TODO: somma N_ATOM_P + N_ATOM_C = numero atomico padre pre scissione
 
