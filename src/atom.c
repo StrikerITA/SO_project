@@ -51,6 +51,7 @@ void signal_handler(int signal) {
     }
 }
 
+// Random num generator for new atoms to be created
 int rand_num_atom(int x, int y) {
     srand(time(0));
     return (rand() % (y - x + 1)) + x;
