@@ -5,3 +5,11 @@ Gestione della scissione(activator-atom)
 
 - Sostituire i printf con i write
 - Usare kill -9 PID per terminare un processo
+
+
+Struttura generale simulazione:
+  La gestione fra i processi si svolge attraverso i semafori.
+  Le informazioni fra i processi sono passate attraverso la memoria condivisa.
+  Il master avvia la simulazione, i processi si scindono, ecc.
+  Prima della terminazione una funzione stampa lo stato finale delle statistiche.
+  Le strutture IPC vengono eliminate e il master termina la simulazione.
