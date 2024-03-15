@@ -16,6 +16,8 @@ void new_atom(char *argv[]){
         perror("Errore nell'esecuzione del programma");
         exit(EXIT_FAILURE);
     }
+
+    //invio segnale all'atomo di scindersi
 }
 
 void test_system(){
