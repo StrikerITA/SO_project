@@ -14,10 +14,12 @@ static void sigHandler(int signum);
 pid_t alimentatore;
 
 int main(){
+	srand(getpid());
 	//TODO:Finire gestione se trova o meno il file
 	verify_file("opt.conf");
 
 	signal(SIGTERM,sigHandler);
+	signal(SIGALRM,sigHandler); 
 	settings_info settings=readSettings();
 	printSettings(settings);
 
@@ -50,21 +52,26 @@ int main(){
 	char param3[20];
 	char param4[20];
 	char param5[20];
-	char *args[6];
+	char *args[7];
+
+
 	//Creazione alimentatore
 	strcpy(process_name,"alimentatore");
 	sprintf(param1,"%d",settings.step);
 	sprintf(param2,"%d",settings.n_nuovi_atomi);
-	sprintf(param3,"%d", master);
-	sprintf(param4,"%d",0);
-	sprintf(param5,"%d",settings.n_atom_max);
+	sprintf(param3,"%d",(int)master);
+	sprintf(param4,"%d",settings.n_atom_max);
+	sprintf(param5,"%d",settings.min_n_atomico);
 	args[0]=process_name;
 	args[1]=param1;//step
 	args[2]=param2;//n_nuovi_atomi
 	args[3]=param3;//master pid
-	args[4]=param4;//first_atom
+	args[4]=param4;
 	args[5]=param5;
+	args[6]=NULL;
+	
 	alimentatore=create_process(process_name,args,master);
+	//dprintf(1,"PID ALIMENTATORE: %d\n",alimentatore);
 	
 	//Creazione attivatore
 	strcpy(process_name,"attivatore");
@@ -76,13 +83,14 @@ int main(){
 	args[3]=NULL;
 	args[4]=NULL;
 	attivatore=create_process(process_name,args,master);
+	//dprintf(1,"%d-",attivatore);
 
 	//Creazione atomo
 
 	strcpy(process_name,"atom");
 	
 	//TODO: da calcolare con funzione randomica
-	int num_atomic=5;
+	int num_atomic=10;
 	sprintf(param1,"%d",num_atomic);
 	sprintf(param2,"%d",settings.min_n_atomico);
 	sprintf(param3,"%d",master);
@@ -96,21 +104,21 @@ int main(){
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
 		atomo=create_process(process_name,args,master);
+		//dprintf(1,"%d-",atomo);
 	}
 	
-	
-	
-	//!Le Preparazioni sono Pronte
+	// ! Le Preparazioni sono Pronte
 	sem_reserve(sem_id,SEM_READY);
+	dprintf(1,"[MASTER]Ho prelevato 1 r\n");
 	wait_to_zero(sem_id,SEM_READY);
-	
+	alarm(settings.sim_duration);
 	dprintf(1,"La simulazione e iniziata\n");
 	int energia_disponibile;
-	for(int i=0;i<settings.sim_duration;i++){
+
+	while (1){
 		sleep(1);
 		sem_reserve(sem_id,SEM_STAT);
 		stats->q_energia_consumata_tot+=settings.energy_demand;
-		
 		
 		energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
 		if(energia_disponibile<settings.energy_demand){
@@ -125,11 +133,11 @@ int main(){
 
 		sem_release(sem_id,SEM_STAT,1);
 	}
+	
+	/*for(int i=0;i<settings.sim_duration;i++){
+		
+	}*/
 	end();
-
-	
-	
-
 }
 
 void stat_reset(statistic *stats){
@@ -181,7 +189,14 @@ void end(){
 
 static void sigHandler(int signum){
 	if(signum==SIGTERM){
-		dprintf(1,"[MASTER]Programma finito con meltdown");
+		dprintf(1,"[MASTER]Programma finito con meltdown\n");
+		end();
+		
+	}
+	else if(signum==SIGALRM){
+		dprintf(1,"[MASTER]Programma finito per timeout\n");
+		end();
 		exit(EXIT_SUCCESS);
+		
 	}
 }

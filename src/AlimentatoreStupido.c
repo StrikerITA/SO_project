@@ -11,31 +11,27 @@
 static void sigHandler(int signum);
 
 int main(int argc, char * argv[]){
-	/*
-	args[0]=process_name;
-	args[1]=param1;//step
-	args[2]=param2;//n_nuovi_atomi
-	args[3]=param3;//master pid
-	args[4]=param4;//first_atom
-	args[5]=param5;//n_atom_max
-	*/
+	srand(getpid());
 	int numero=argc;
+	dprintf(1,"%d\n",numero);
 	int sem_id=sem_get(PATHNAME);
+
 	int step=atoi(argv[1]);
 	int n_nuovi_atomi=atoi(argv[2]);
 	pid_t master=atoi(argv[3]);
-	int first_atom=atoi(argv[4]);
-	int n_atom_max=atoi(argv[5]);
-
+	int n_atom_max=atoi(argv[4]);
+	int min_n_atom=atoi(argv[5]);
 	//!cambio step per prove
 	step=999999000;
+	
 
 	pid_t atomo;
 	char process_name[20];
 	char param1[20];
 	char param2[20];
 	char param3[20];
-	char *args[3];
+	char param4[20];
+	char *args[6];
 	int num_atomic;
 
 	dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
@@ -43,11 +39,9 @@ int main(int argc, char * argv[]){
 	struct timespec my_time;
 	
 	sem_reserve(sem_id,SEM_READY);
+	dprintf(1,"[ALIMENTATORE]Ho prelevato 1 r\n");
 	wait_to_zero(sem_id,SEM_READY);
 	dprintf(1,"[ALIMENTATORE]start\n");
-
-	
-
 	
 	while(true){
 		my_time.tv_sec = 0;
@@ -60,12 +54,17 @@ int main(int argc, char * argv[]){
 			//dprintf(1,"Creo arom");
 			strcpy(process_name,"atom");
 			//calcolo num_atomico
-			num_atomic=7;
+			num_atomic=30;
 			sprintf(param1,"%d",num_atomic);
-			
+			sprintf(param2,"%d",min_n_atom);
+			sprintf(param3,"%d",master);
+			sprintf(param4,"%d",0);
 			args[0]=process_name;
 			args[1]=param1;
-			args[2]=NULL;
+			args[2]=param2;
+			args[3]=param3;
+			args[4]=param4;
+			args[5]=NULL;
 			atomo=create_process(process_name,args,master);
 		}
 
@@ -74,7 +73,7 @@ int main(int argc, char * argv[]){
 }
 static void sigHandler(int signum){
 	if(signum==SIGTERM){
-		dprintf(1,"[ALIMENTATORE]L'alimnetatore %d a finito la sua esecuzione\n",getpid());
+		dprintf(1,"[ALIMENTATORE]L'alimentatore %d a finito la sua esecuzione\n",getpid());
 		exit(EXIT_SUCCESS);
 	}
 }
