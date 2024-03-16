@@ -191,7 +191,7 @@ static void sigHandler(int signum){
 	if(signum==SIGTERM){
 		dprintf(1,"[MASTER]Programma finito con meltdown\n");
 		end();
-		
+		//exit(EXIT_FAILURE);
 	}
 	else if(signum==SIGALRM){
 		dprintf(1,"[MASTER]Programma finito per timeout\n");

@@ -39,7 +39,7 @@ int main(int argc, char * argv[]){
 	//Finite preparazioni
 	if(first_atom==1){
 	sem_reserve(sem_id,SEM_READY);
-	dprintf(1,"[ATOMO]Ho prelevato 1 r\n");
+	//dprintf(1,"[ATOMO]Ho prelevato 1 r\n");
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}

@@ -20,7 +20,7 @@ int create_process(char *pathname,char * argv[],pid_t meltdownSig){
 	pid=fork();
 	if(pid==-1){
 		//!Error Meltdown
-		kill(meltdownSig,SIGINT);
+		kill(meltdownSig,SIGTERM);
 		printf("Meltdown");
 		exit(EXIT_SUCCESS);
 	}else if(pid==0){
