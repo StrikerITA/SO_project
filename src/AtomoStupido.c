@@ -1,21 +1,86 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "lib/utils.h"
 #include "lib/ipc_manager.h"
 #include <errno.h>
 #define PATHNAME "Makefile"
 
 int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
-	dprintf(1,"%s\n",argv[0]);
+	//TODO: mettere if per argc
+	if(argc>5){
+		
+	}
+	int numero=argc;
+	int num_atomic=atoi(argv[1]);
+	int min_numero_atomico=atoi(argv[2]);
+	pid_t master_pid=atoi(argv[3]);
+	int first_atom=atoi(argv[4]);
+	dprintf(1,"%d",first_atom);
+	/*dprintf(1,"%s\n",argv[0]);
 	dprintf(1,"%s\n",argv[1]);
-	dprintf(1,"[ATOMO]L'atomo %d e stato creato\n",getpid());
+	dprintf(1,"[ATOMO]L'atomo %d e stato creato\n",getpid());*/
+	
 	statistic *stats=attach_memory_block(PATHNAME);
-	sem_reserve(sem_id,SEM_READY);
-	wait_to_zero(sem_id,SEM_READY);
-	dprintf(1,"[ATOMO]start\n");
+	
+	//Variabili necessare per scissione
+	pid_t atomo;
+	char process_name[20];
+	char param1[20];
+	char param2[20];
+	char param3[20];
+	char *args[3];
 
-	for(int i=0;i< 30;i++){
+	strcpy(process_name,"atom");
+	args[0]=process_name;
+
+	//Finite preparazioni
+	//if(first_atom==1){
+		sem_reserve(sem_id,SEM_READY);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+		wait_to_zero(sem_id,SEM_READY);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+	//}
+	
+	
+
+	while(true){
+		//sleep(1);
+		//Chiedo scissione
+		sem_reserve(sem_id,SEM_ACTIVATOR);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+		//...Verificare se e scoria
+		if(num_atomic<min_numero_atomico){
+			exit(EXIT_SUCCESS);
+		}
+		//Calcolo num atomico e energia liberata
+		
+		sprintf(param1,"%d",num_atomic);
+		args[1]=param1;
+		args[2]=NULL;
+		atomo=create_process(process_name,args,master_pid);
+
+		sem_reserve(sem_id,SEM_STAT);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+		stats->n_scissioni_tot++;
+		stats->n_scissioni_sec++;
+		sem_release(sem_id,SEM_STAT,1);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+
+	}
+
+	/*for(int i=0;i< 30;i++){
 		sleep(1);
 		sem_reserve(sem_id,SEM_STAT);
 		//dprintf(1,"[ATOMO]errno:%d\n",errno);
@@ -27,7 +92,10 @@ int main(int argc, char * argv[]){
 		stats->n_attivazioni_tot++;
 		stats->n_attivazioni_sec++;
 		sem_release(sem_id,SEM_STAT,1);
-	}
+	}*/
+
+	//TODO: fare gestione scorie
+
 	detach_memory_block(stats);
 	
 	dprintf(1,"[ATOMO]L'atomo %d a finito la sua esecuzione\n",getpid());

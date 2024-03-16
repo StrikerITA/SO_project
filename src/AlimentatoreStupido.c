@@ -1,21 +1,80 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
+#include <time.h>
+#include <string.h>
 #include "lib/ipc_manager.h"
+#include "lib/utils.h"
 #define PATHNAME "Makefile"
 
+static void sigHandler(int signum);
+
 int main(int argc, char * argv[]){
+	/*
+	args[0]=process_name;
+	args[1]=param1;//step
+	args[2]=param2;//n_nuovi_atomi
+	args[3]=param3;//master pid
+	args[4]=param4;//first_atom
+	args[5]=param5;//n_atom_max
+	*/
+	int numero=argc;
 	int sem_id=sem_get(PATHNAME);
-	dprintf(1,"%s\n",argv[0]);
-	dprintf(1,"%s\n",argv[1]);
-	dprintf(1,"%s\n",argv[2]);
+	int step=atoi(argv[1]);
+	int n_nuovi_atomi=atoi(argv[2]);
+	pid_t master=atoi(argv[3]);
+	int first_atom=atoi(argv[4]);
+	int n_atom_max=atoi(argv[5]);
+
+	//!cambio step per prove
+	step=999999000;
+
+	pid_t atomo;
+	char process_name[20];
+	char param1[20];
+	char param2[20];
+	char param3[20];
+	char *args[3];
+	int num_atomic;
+
 	dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
+	signal(SIGTERM,sigHandler);
+	struct timespec my_time;
 	
 	sem_reserve(sem_id,SEM_READY);
 	wait_to_zero(sem_id,SEM_READY);
 	dprintf(1,"[ALIMENTATORE]start\n");
 
+	
 
-	sleep(6);
-	dprintf(1,"[ALIMENTATORE]L'alimnetatore %d a finito la sua esecuzione\n",getpid());
+	
+	while(true){
+		my_time.tv_sec = 0;
+		my_time.tv_nsec = step; 
+		nanosleep(&my_time, NULL);
+		//calcolo numero atomico
+		
+		atomo=1;
+		for(int i=0;i<n_nuovi_atomi && atomo>0;i++){
+			//dprintf(1,"Creo arom");
+			strcpy(process_name,"atom");
+			//calcolo num_atomico
+			num_atomic=7;
+			sprintf(param1,"%d",num_atomic);
+			
+			args[0]=process_name;
+			args[1]=param1;
+			args[2]=NULL;
+			atomo=create_process(process_name,args,master);
+		}
+
+		
+	}
+}
+static void sigHandler(int signum){
+	if(signum==SIGTERM){
+		dprintf(1,"[ALIMENTATORE]L'alimnetatore %d a finito la sua esecuzione\n",getpid());
+		exit(EXIT_SUCCESS);
+	}
 }

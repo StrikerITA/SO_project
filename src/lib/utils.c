@@ -13,3 +13,23 @@ int rand_num_atom(int min, int max){
     srand(getpid());
     return (rand() % (max - min + 1)) + min;
 }
+
+int create_process(char *pathname,char * argv[],pid_t meltdownSig){
+	pid_t pid;
+	
+	pid=fork();
+	if(pid==-1){
+		//!Error Meltdown
+		kill(meltdownSig,SIGINT);
+		printf("Meltdown");
+		exit(EXIT_SUCCESS);
+		
+	}else if(pid==0){
+		execve(pathname,argv,NULL);
+		exit(EXIT_SUCCESS);
+		
+	}
+	return pid;
+	
+
+}

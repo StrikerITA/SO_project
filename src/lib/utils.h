@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+#include <signal.h>
 
 int isNumber(char s[]);
 int rand_num_atom(int min, int max);
+int create_process(char *pathname,char * argv[],pid_t meltdownSig);
