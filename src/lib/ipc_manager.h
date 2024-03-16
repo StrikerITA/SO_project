@@ -28,7 +28,7 @@
 //Manca gestione degli errori con errno
 int sem_create(char *pathname);
 int sem_destroy(char *pathname);
-int sem_get(key_t key);
+int sem_get(char *pathname);
 int sem_set_val(int sem_id, sem_types sem_num, int sem_val);
 int sem_reserve(int sem_id, sem_types sem_num);
 int sem_release(int sem_id, sem_types sem_num, int num_resources);

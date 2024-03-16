@@ -1,21 +1,20 @@
 #include "ipc_manager.h"
 
-//
 int sem_create(char *pathname){
 	key_t key;
 	key=ftok(pathname,SEMAPHORE);
-	printf("La mia chiave e: %d",key);
+
+	//printf("La mia chiave e: %d\n",key);
 	return semget(key,NUMBER_SEMAPHORES,IPC_CREAT| 0666| IPC_EXCL);
 }
 int sem_destroy(char *pathname){
-	key_t key;
-	key=ftok(pathname,SEMAPHORE);
-	printf("La mia chiave e: %d\n",key);
-	int id=sem_get(key);
-	printf("Il mio ID e: %d\n",id);
+	//printf("La mia chiave e: %d\n",key);
+	int id=sem_get(pathname);
+	//printf("Il mio ID e: %d\n",id);
 	return semctl(id,NUMBER_SEMAPHORES,IPC_RMID);
 }
-int sem_get(key_t key){
+int sem_get(char *pathname){
+	key_t key=ftok(pathname,SEMAPHORE);
 	return semget(key,NUMBER_SEMAPHORES,0);
 }
 
@@ -48,9 +47,7 @@ int wait_to_zero(int sem_id,sem_types sem_num){
 
 //-------------------------------------------------
 //-------------SHARED-MEMORY-----------
-#define IPC_RESULT_ERROR (-1) //
-#define BLOCK_SIZE 4096
-#define FILENAME "writeshmem.c"
+#define IPC_RESULT_ERROR (-1) 
 int get_shmem(char *filename){
 	key_t key=ftok(filename,SHARED_MEMORY);
 	return shmget(key,sizeof(statistic),0);
@@ -59,16 +56,8 @@ int get_shmem(char *filename){
 int create_shmem(char *filename){
     key_t key;
 	int size=sizeof(statistic);
-    //Request a key
-    //The key is linked to a filename, so that other programs can access it
-    key=ftok(filename,SHARED_MEMORY);//ftok returns a key based on path and id 
-    /*if(key==IPC_RESULT_ERROR){
-        return IPC_RESULT_ERROR;
-    }*/
-
-    //get shared block --- create it if it doesn't exist
-    //return ID of the shared block
-    //0644| IPC_CREAT permissions
+    
+    key=ftok(filename,SHARED_MEMORY);
     return shmget(key, size, 0644| IPC_CREAT); 
 }
 
@@ -110,5 +99,5 @@ int get_msgq(char *filename){
 }
 int destroy_msgq(char *filename){
 	int msgq_id=get_msgq(filename);
-	//return msgctl(msgq_id,IPC_RMID);
+	return msgctl(msgq_id,IPC_RMID,NULL);
 }
