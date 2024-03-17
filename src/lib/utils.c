@@ -21,7 +21,7 @@ int create_process(char *pathname,char * argv[],pid_t meltdownSig){
 	if(pid==-1){
 		//!Error Meltdown
 		kill(meltdownSig,SIGTERM);
-		printf("Meltdown");
+		//printf("Meltdown");
 		exit(EXIT_SUCCESS);
 	}else if(pid==0){
 		execve(pathname,argv,NULL);
@@ -38,4 +38,13 @@ int num_atom_generator(int min, int max){
 	}else{
 		return rand_num * rand_num_atom(3,15);
 	}
+}
+
+int num_atom_generator_v2(int num){
+	return num & rand_num_atom(10,100);
+	/*if(rand_num <= max/2){
+		return rand_num * rand_num_atom(15, 40);
+	}else{
+		return rand_num * rand_num_atom(3,15);
+	}*/
 }

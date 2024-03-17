@@ -73,7 +73,7 @@ int main(int argc, char * argv[]){
 }
 static void sigHandler(int signum){
 	if(signum==SIGTERM){
-		dprintf(1,"[ALIMENTATORE]L'alimentatore %d a finito la sua esecuzione\n",getpid());
+		dprintf(1,"[ALIMENTATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
 		exit(EXIT_SUCCESS);
 	}
 }

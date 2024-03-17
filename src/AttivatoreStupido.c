@@ -29,7 +29,7 @@ int main(int argc, char * argv[]){
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
-		numero_attivazioni=num_atom_generator(1, num_atomi_nuovi);
+		numero_attivazioni = num_atom_generator_v2(num_atomi_nuovi);
 		sem_release(sem_id,SEM_ACTIVATOR, numero_attivazioni);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);

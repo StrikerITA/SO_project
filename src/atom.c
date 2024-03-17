@@ -120,6 +120,6 @@ int main(int argc, char * argv[]){
 
 	detach_memory_block(stats);
 	
-	dprintf(1,"[ATOMO]L'atomo %d a finito la sua esecuzione\n",getpid());
+	dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
 
 }
