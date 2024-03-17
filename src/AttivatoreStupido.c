@@ -9,6 +9,7 @@ int main(int argc, char * argv[]){
 	int numero=argc;
 	int sem_id=sem_get(PATHNAME);
 	char *values=argv[0];
+    int num_atomi_nuovi=atoi(argv[1]);
 	//dprintf(1,"%s\n",argv[0]);
 	//dprintf(1,"%s\n",argv[1]);
 	//dprintf(1,"%s\n",argv[2]);
@@ -29,7 +30,7 @@ int main(int argc, char * argv[]){
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
-		sem_release(sem_id,SEM_ACTIVATOR,14);
+		sem_release(sem_id,SEM_ACTIVATOR, num_atom_generator(1, num_atomi_nuovi));
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}

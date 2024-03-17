@@ -30,3 +30,12 @@ int create_process(char *pathname,char * argv[],pid_t meltdownSig){
 	}
 	return pid;
 }
+
+int num_atom_generator(int min, int max){
+	int rand_num = rand_num_atom(min, max);
+	if(rand_num <= max/2){
+		return rand_num * rand_num_atom(15, 40);
+	}else{
+		return rand_num * rand_num_atom(3,15);
+	}
+}
