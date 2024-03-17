@@ -22,7 +22,7 @@ int main(int argc, char * argv[]){
 	int n_atom_max=atoi(argv[4]);
 	int min_n_atom=atoi(argv[5]);
 	//!cambio step per prove
-	step=999999000;
+	//step=999999000;
 	
 
 	pid_t atomo;

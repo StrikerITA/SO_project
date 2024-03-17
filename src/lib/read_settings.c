@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-#include "util.h"
+#include "utils.h"
 #include <errno.h>
 
 

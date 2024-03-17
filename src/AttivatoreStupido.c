@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "lib/ipc_manager.h"
+#include "lib/utils.h"
 #define PATHNAME "Makefile"
 
 int main(int argc, char * argv[]){
@@ -10,9 +11,7 @@ int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
 	char *values=argv[0];
     int num_atomi_nuovi=atoi(argv[1]);
-	//dprintf(1,"%s\n",argv[0]);
-	//dprintf(1,"%s\n",argv[1]);
-	//dprintf(1,"%s\n",argv[2]);
+	
 	//dprintf(1,"[ATTIVATORE]L'attivatore %d e stato creato\n",getpid());
 	statistic *stats=attach_memory_block(PATHNAME);
 	
@@ -23,27 +22,28 @@ int main(int argc, char * argv[]){
 
 	dprintf(1,"[ATTIVATORE]start\n");
 
-
+	int numero_attivazioni=-1;
 	while(true){
-		//sleep(1);
+		
 		wait_to_zero(sem_id,SEM_ACTIVATOR);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
-		sem_release(sem_id,SEM_ACTIVATOR, num_atom_generator(1, num_atomi_nuovi));
+		numero_attivazioni=num_atom_generator(1, num_atomi_nuovi);
+		sem_release(sem_id,SEM_ACTIVATOR, numero_attivazioni);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
 
-		sem_reserve(sem_id,SEM_STAT);
+		sem_reserve(sem_id,SEM_STATS);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
 
-		stats->n_attivazioni_tot+=14;
-		stats->n_attivazioni_sec+=14;
+		stats->n_attivazioni_tot+=numero_attivazioni;
+		stats->n_attivazioni_sec+=numero_attivazioni;
 		
-		sem_release(sem_id,SEM_STAT,1);
+		sem_release(sem_id,SEM_STATS,1);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}

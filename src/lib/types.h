@@ -32,5 +32,5 @@ typedef enum{
 typedef enum{
 	SEM_READY=0,
 	SEM_ACTIVATOR=1,
-	SEM_STAT=2
+	SEM_STATS=2
 }sem_types;

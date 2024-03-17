@@ -33,7 +33,7 @@ int main(){
 	dprintf(1,"Semaforo Creato con id: %d\n",sem_id);
 	sem_set_val(sem_id,SEM_READY,num_of_process);
 	sem_set_val(sem_id,SEM_ACTIVATOR,0);
-	sem_set_val(sem_id,SEM_STAT,1);
+	sem_set_val(sem_id,SEM_STATS,1);
 
 	//Creo Memoria Condivisa e la inizializzo
 	shmem_id=create_shmem(PATHNAME);
@@ -78,7 +78,7 @@ int main(){
 	sprintf(param1,"%d",settings.n_nuovi_atomi);
 
 	args[0]=process_name;
-	args[1]=NULL;
+	args[1]=param1;
 	args[2]=NULL;
 	args[3]=NULL;
 	args[4]=NULL;
@@ -117,7 +117,7 @@ int main(){
 
 	while (1){
 		sleep(1);
-		sem_reserve(sem_id,SEM_STAT);
+		sem_reserve(sem_id,SEM_STATS);
 		stats->q_energia_consumata_tot+=settings.energy_demand;
 		
 		energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
@@ -131,7 +131,7 @@ int main(){
 		print_stats(stats);
 		stat_reset(stats);
 
-		sem_release(sem_id,SEM_STAT,1);
+		sem_release(sem_id,SEM_STATS,1);
 	}
 	
 	/*for(int i=0;i<settings.sim_duration;i++){

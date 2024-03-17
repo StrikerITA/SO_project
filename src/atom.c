@@ -60,13 +60,13 @@ int main(int argc, char * argv[]){
 		}
 		//...Verificare se e scoria
 		if(num_atomic < min_numero_atomico){
-			sem_reserve(sem_id,SEM_STAT);
+			sem_reserve(sem_id,SEM_STATS);
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}	
 			stats->n_scorie_tot++;
 			stats->n_scorie_sec++;
-			sem_release(sem_id,SEM_STAT,1);
+			sem_release(sem_id,SEM_STATS,1);
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}
@@ -89,14 +89,14 @@ int main(int argc, char * argv[]){
 		//creazione nuovo atomo
 		atomo=create_process(process_name, args, master_pid);
 
-		sem_reserve(sem_id,SEM_STAT);
+		sem_reserve(sem_id,SEM_STATS);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
 		//carico i dati dentro le stats
 		stats->n_scissioni_tot++;
 		stats->n_scissioni_sec++;
-		sem_release(sem_id,SEM_STAT,1);
+		sem_release(sem_id,SEM_STATS,1);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}

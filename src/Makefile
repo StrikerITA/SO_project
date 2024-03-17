@@ -4,3 +4,6 @@ all:
 	gcc $(CFLAGS) atom.c lib/utils.c lib/ipc_manager.c -o atom                     
 	gcc $(CFLAGS) AlimentatoreStupido.c lib/utils.c lib/ipc_manager.c -o alimentatore             
 	gcc $(CFLAGS) AttivatoreStupido.c lib/utils.c lib/ipc_manager.c -o attivatore 
+
+clear: 
+	rm master atom attivatore alimentatore
