@@ -54,7 +54,7 @@ int main(int argc, char * argv[]){
 			//dprintf(1,"Creo arom");
 			strcpy(process_name,"atom");
 			//calcolo num_atomico
-			num_atomic=30;
+			num_atomic=rand_num_atom(1, n_atom_max);
 			sprintf(param1,"%d",num_atomic);
 			sprintf(param2,"%d",min_n_atom);
 			sprintf(param3,"%d",master);

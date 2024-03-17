@@ -74,7 +74,7 @@ int main(int argc, char * argv[]){
 			exit(EXIT_SUCCESS);
 		}
 		//Calcolo num atomico e energia liberata
-		num_atomic_figlio = num_atomic/2;
+		num_atomic_figlio = rand_num_atom(1, num_atomic);
 		num_atomic=num_atomic-num_atomic_figlio;
 		sprintf(param1,"%d",num_atomic_figlio);
 		sprintf(param2,"%d",min_numero_atomico);
