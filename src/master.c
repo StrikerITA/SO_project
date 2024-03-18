@@ -20,6 +20,7 @@ int main(){
 
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
+	signal(SIGUSR1,sigHandler); //explode
 	settings_info settings=readSettings();
 	printSettings(settings);
 
@@ -52,6 +53,7 @@ int main(){
 	char param3[20];
 	char param4[20];
 	char param5[20];
+	char param6[20];
 	char *args[7];
 
 	//Creazione alimentatore
@@ -61,13 +63,15 @@ int main(){
 	sprintf(param3,"%d",(int)master);
 	sprintf(param4,"%d",settings.n_atom_max);
 	sprintf(param5,"%d",settings.min_n_atomico);
+	sprintf(param6,"%d",settings.energy_explode_threshold);
 	args[0]=process_name;
 	args[1]=param1;//step
 	args[2]=param2;//n_nuovi_atomi
 	args[3]=param3;//master pid
 	args[4]=param4;
 	args[5]=param5;
-	args[6]=NULL;
+	args[6]=param6;
+	args[7]=NULL;
 	
 	alimentatore=create_process(process_name,args,master);
 	//dprintf(1,"PID ALIMENTATORE: %d\n",alimentatore);
@@ -85,7 +89,6 @@ int main(){
 	//dprintf(1,"%d-",attivatore);
 
 	//Creazione atomo
-
 	strcpy(process_name,"atom");
 	
 	//TODO: da calcolare con funzione randomica
@@ -94,12 +97,14 @@ int main(){
 	sprintf(param2,"%d",settings.min_n_atomico);
 	sprintf(param3,"%d",master);
 	sprintf(param4,"%d",1);
+	sprintf(param5,"%d",settings.energy_explode_threshold);
 	args[0]=process_name;//
 	args[1]=param1;//numero atomico
 	args[2]=param2;//min numero atomico
 	args[3]=param3;//pid master
 	args[4]=param4;//first_atom
-	args[5]=NULL;
+	args[5]=param5;
+	args[6]=NULL;
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
 		atomo=create_process(process_name,args,master);
@@ -120,16 +125,8 @@ int main(){
 		sleep(1);
 		sem_reserve(sem_id,SEM_STATS);
 		stats->q_energia_consumata_tot+=settings.energy_demand;
-
-		// energia_liberata = stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
-		// if (energia_liberata > settings.energy_explode_threshold){
-		// 	dprintf(1,"energy_prod=%d\n", stats->q_energia_prodotta_tot);
-		// 	dprintf(1,"energy=%d\n", energia_liberata);
-		// 	dprintf(1,"Explode\n");
-		// 	end();
-		// }
 		
-		energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
+		//energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
 		if(energia_disponibile<settings.energy_demand){
 			//dprintf(1,"blackout\n");
 			//end(alimentatore);
@@ -201,12 +198,14 @@ static void sigHandler(int signum){
 		case SIGTERM:
 			dprintf(1,"[MASTER]Programma finito con meltdown\n");
 			end();
-			exit(EXIT_FAILURE);
 			break;
 		case SIGALRM:
 			dprintf(1,"[MASTER]Programma finito per timeout\n");
 			end();
-			exit(EXIT_SUCCESS);
+			break;
+		case SIGUSR1:
+			dprintf(1,"[MASTER]Programma finito per explode\n");
+			end();
 			break;
 		default:
 			dprintf(1, "Segnale non riconosciuto\n");

@@ -7,6 +7,7 @@
 #define PATHNAME "Makefile"
 
 int energy(int n1, int n2);
+int max(int n1, int n2);
 
 int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
@@ -17,6 +18,7 @@ int main(int argc, char * argv[]){
 	int min_numero_atomico=atoi(argv[2]);
 	pid_t master_pid=atoi(argv[3]);
 	int first_atom=atoi(argv[4]);
+	int energy_explode_threshold = atoi(argv[5]);
 	//dprintf(1,"%d",first_atom);
 	/*dprintf(1,"%s\n",argv[0]);
 	dprintf(1,"%s\n",argv[1]);
@@ -32,7 +34,8 @@ int main(int argc, char * argv[]){
 	char param3[20];
 	char param4[20];
 	char param5[20];
-	char *args[7];
+	char param6[20];
+	char *args[8];
 
 	srand(getpid());
 	strcpy(process_name,"atom");
@@ -83,24 +86,32 @@ int main(int argc, char * argv[]){
 		//Calcolo energia liberata energy(n1,n2) = n1 * n2 - max(n1 | n2)
 		energia_liberata = energy(num_atomic, num_atomic_figlio);
 		
-		stats->q_energia_prodotta_sec++;
-		stats->q_energia_prodotta_tot+=energia_liberata;
-
 		sprintf(param1,"%d",num_atomic_figlio);
 		sprintf(param2,"%d",min_numero_atomico);
 		sprintf(param3,"%d",master_pid);
 		sprintf(param4,"%d",0);
+		sprintf(param5,"%d",energy_explode_threshold);
 		args[1]=param1;
 		args[2]=param2;
 		args[3]=param3;
 		args[4]=param4;
-		args[5]=NULL;
+		args[5]=param5;
+		args[6]=NULL;
 
 		//creazione nuovo atomo
 		atomo=create_process(process_name, args, master_pid);
 
 		sem_reserve(sem_id,SEM_STATS);
 		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+
+		//carico dati energia liberata
+		stats->q_energia_prodotta_sec+=energia_liberata;
+		stats->q_energia_prodotta_tot+=energia_liberata;
+		
+		if (stats->q_energia_prodotta_tot > energy_explode_threshold){
+			kill(SIGUSR1, master_pid);
 			exit(EXIT_SUCCESS);
 		}
 		//carico i dati dentro le stats
@@ -135,22 +146,14 @@ int main(int argc, char * argv[]){
 
 }
 
-int energy(int n1, int n2){
-	int energia_liberata = 0;
+int energy(int n1, int n2){	
+	return n1 * n2 - max(n1, n2);
+}
 
-	if (n1 == n2){
-		//energia_liberata = max
-		energia_liberata = n1 * n2;
-	}else if (n1 == 1 || n2 == 1){
-		energia_liberata = 0;
+int max(int n1, int n2){
+	if (n1 > n2){
+		return n1;
 	}else{
-		//energia_liberata = prodotta - consumata
-		if (n1 > n2){
-			energia_liberata = n1 * n2 - n1;
-		} else {
-			energia_liberata = n1 * n2 - n2;
-		}
+		return n2;
 	}
-	
-	return energia_liberata;			
 }

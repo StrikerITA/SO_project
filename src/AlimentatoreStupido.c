@@ -21,9 +21,9 @@ int main(int argc, char * argv[]){
 	pid_t master=atoi(argv[3]);
 	int n_atom_max=atoi(argv[4]);
 	int min_n_atom=atoi(argv[5]);
+	int energy_explode_threshold = atoi(argv[6]);
 	//!cambio step per prove
 	//step=999999000;
-	
 
 	pid_t atomo;
 	char process_name[20];
@@ -31,7 +31,8 @@ int main(int argc, char * argv[]){
 	char param2[20];
 	char param3[20];
 	char param4[20];
-	char *args[6];
+	char param5[20];
+	char *args[7];
 	int num_atomic;
 
 	dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
@@ -59,12 +60,14 @@ int main(int argc, char * argv[]){
 			sprintf(param2,"%d",min_n_atom);
 			sprintf(param3,"%d",master);
 			sprintf(param4,"%d",0);
+			sprintf(param5,"%d", energy_explode_threshold);
 			args[0]=process_name;
 			args[1]=param1;
 			args[2]=param2;
 			args[3]=param3;
 			args[4]=param4;
-			args[5]=NULL;
+			args[5]=param5;
+			args[6]=NULL;
 			atomo=create_process(process_name,args,master);
 		}
 
