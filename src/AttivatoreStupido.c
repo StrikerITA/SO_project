@@ -16,11 +16,11 @@ int main(int argc, char * argv[]){
 	statistic *stats=attach_memory_block(PATHNAME);
 	
 	sem_reserve(sem_id,SEM_READY);
-	dprintf(1,"[ATTIVATORE]Ho prelevato 1 r\n");
+	//dprintf(1,"[ATTIVATORE]Ho prelevato 1 r\n");
 	wait_to_zero(sem_id,SEM_READY);
 
 
-	dprintf(1,"[ATTIVATORE]start\n");
+	//dprintf(1,"[ATTIVATORE]start\n");
 
 	int numero_attivazioni=-1;
 	while(true){
@@ -49,5 +49,5 @@ int main(int argc, char * argv[]){
 		}
 	}
 	
-	dprintf(1,"[ATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
+	//dprintf(1,"[ATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
 }

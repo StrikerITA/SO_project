@@ -13,7 +13,7 @@ static void sigHandler(int signum);
 int main(int argc, char * argv[]){
 	srand(getpid());
 	int numero=argc;
-	dprintf(1,"%d\n",numero);
+	//dprintf(1,"%d\n",numero);
 	int sem_id=sem_get(PATHNAME);
 
 	int step=atoi(argv[1]);
@@ -35,14 +35,14 @@ int main(int argc, char * argv[]){
 	char *args[7];
 	int num_atomic;
 
-	dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
+	//dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
 	signal(SIGTERM,sigHandler);
 	struct timespec my_time;
 	
 	sem_reserve(sem_id,SEM_READY);
-	dprintf(1,"[ALIMENTATORE]Ho prelevato 1 r\n");
+	//dprintf(1,"[ALIMENTATORE]Ho prelevato 1 r\n");
 	wait_to_zero(sem_id,SEM_READY);
-	dprintf(1,"[ALIMENTATORE]start\n");
+	//dprintf(1,"[ALIMENTATORE]start\n");
 	
 	while(true){
 		my_time.tv_sec = 0;
@@ -76,7 +76,7 @@ int main(int argc, char * argv[]){
 }
 static void sigHandler(int signum){
 	if(signum==SIGTERM){
-		dprintf(1,"[ALIMENTATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
+		//dprintf(1,"[ALIMENTATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
 		exit(EXIT_SUCCESS);
 	}
 }

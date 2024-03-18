@@ -31,19 +31,19 @@ int main(){
 	//Creo Semaforo e lo inizializzo
 	int sem_id,shmem_id;
 	sem_id=sem_create(PATHNAME);
-	dprintf(1,"Semaforo Creato con id: %d\n",sem_id);
+	//dprintf(1,"Semaforo Creato con id: %d\n",sem_id);
 	sem_set_val(sem_id,SEM_READY,num_of_process);
 	sem_set_val(sem_id,SEM_ACTIVATOR,0);
 	sem_set_val(sem_id,SEM_STATS,1);
 
 	//Creo Memoria Condivisa e la inizializzo
 	shmem_id=create_shmem(PATHNAME);
-	dprintf(1,"Memoria Condivisa con id: %d\n",shmem_id);
+	//dprintf(1,"Memoria Condivisa con id: %d\n",shmem_id);
 
 	//Si attacca alla memoria condivisa, e inizializza le statistiche a zero
 	statistic *stats=attach_memory_block(PATHNAME);
 	bzero(stats,sizeof(statistic));
-	print_stats(stats);
+	//print_stats(stats);
 	
 	pid_t  atomo, attivatore, master;
 	master=getpid();
@@ -54,7 +54,7 @@ int main(){
 	char param4[20];
 	char param5[20];
 	char param6[20];
-	char *args[7];
+	char *args[8];
 
 	//Creazione alimentatore
 	strcpy(process_name,"alimentatore");
@@ -113,25 +113,25 @@ int main(){
 	
 	// ! Le Preparazioni sono Pronte
 	sem_reserve(sem_id,SEM_READY);
-	dprintf(1,"[MASTER]Ho prelevato 1 r\n");
+	//printf(1,"[MASTER]Ho prelevato 1 r\n");
 	wait_to_zero(sem_id,SEM_READY);
 	alarm(settings.sim_duration);
 	dprintf(1,"La simulazione e iniziata\n");
 	//todo: da modificare energia disponibile
-	int energia_disponibile = 300;
+	int energia_disponibile = 0;
 	int energia_liberata = 0;
 
 	while (1){
 		sleep(1);
 		sem_reserve(sem_id,SEM_STATS);
-		stats->q_energia_consumata_tot+=settings.energy_demand;
-		
-		//energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
+		energia_disponibile=stats->q_energia_prodotta_tot - stats->q_energia_consumata_tot;
+
 		if(energia_disponibile<settings.energy_demand){
-			//dprintf(1,"blackout\n");
-			//end(alimentatore);
+			dprintf(1,"[MASTER]Programma finito con blackout\n");
+			end();
 			//TODO: DA finire gestione errore
-		}
+		}	
+		stats->q_energia_consumata_tot+=settings.energy_demand;
 		stats->q_energia_consumata_sec+=settings.energy_demand;
 		
 		print_stats(stats);
@@ -187,9 +187,11 @@ void end(){
 	kill(alimentatore,SIGTERM);
 	//detach_memory_block(stats);
 	sem_destroy(PATHNAME);
-	dprintf(1,"Semaforo Rimosso\n");
+	//dprintf(1,"Semaforo Rimosso\n");
 	destroy_memory_block(PATHNAME);
-	dprintf(1,"Memoria Condivisa Rimossa\n");
+	//dprintf(1,"Memoria Condivisa Rimossa\n");
+	/*dprintf(1,"============Statistiche Finali============");
+	print_stats(stats);*/
 	exit(EXIT_SUCCESS);
 }
 

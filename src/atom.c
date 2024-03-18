@@ -85,7 +85,7 @@ int main(int argc, char * argv[]){
 		
 		//Calcolo energia liberata energy(n1,n2) = n1 * n2 - max(n1 | n2)
 		energia_liberata = energy(num_atomic, num_atomic_figlio);
-		
+		//dprintf(1,"%d \n",energia_liberata);
 		sprintf(param1,"%d",num_atomic_figlio);
 		sprintf(param2,"%d",min_numero_atomico);
 		sprintf(param3,"%d",master_pid);
@@ -111,7 +111,8 @@ int main(int argc, char * argv[]){
 		stats->q_energia_prodotta_tot+=energia_liberata;
 		
 		if (stats->q_energia_prodotta_tot > energy_explode_threshold){
-			kill(SIGUSR1, master_pid);
+			//kill(SIGUSR1, master_pid);
+			kill(master_pid,SIGUSR1);
 			exit(EXIT_SUCCESS);
 		}
 		//carico i dati dentro le stats
@@ -124,30 +125,14 @@ int main(int argc, char * argv[]){
 		}
 	}
 
-	/*for(int i=0;i< 30;i++){
-		sleep(1);
-		sem_reserve(sem_id,SEM_STAT);
-		//dprintf(1,"[ATOMO]errno:%d\n",errno);
-		if(errno==EIDRM ||errno==EINVAL){
-			//dprintf(1,"[ATOMO]L'atomo errore:%d\n",errno);
-			//sleep(4);
-			exit(EXIT_SUCCESS);
-		}
-		stats->n_attivazioni_tot++;
-		stats->n_attivazioni_sec++;
-		sem_release(sem_id,SEM_STAT,1);
-	}*/
-
-	//TODO: fare gestione scorie
-
 	detach_memory_block(stats);
 	
-	dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
+	//dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
 
 }
 
 int energy(int n1, int n2){	
-	return n1 * n2 - max(n1, n2);
+	return ((n1 * n2) - max(n1, n2));
 }
 
 int max(int n1, int n2){
