@@ -6,6 +6,8 @@
 #include <errno.h>
 #define PATHNAME "Makefile"
 
+int energy(int n1, int n2);
+
 int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
 	//TODO: mettere if per argc
@@ -50,6 +52,7 @@ int main(int argc, char * argv[]){
 	}
 	
 	int num_atomic_figlio;
+	int energia_liberata;
 
 	while(true){
 		//sleep(1);
@@ -73,9 +76,16 @@ int main(int argc, char * argv[]){
 
 			exit(EXIT_SUCCESS);
 		}
-		//Calcolo num atomico e energia liberata
+		//Calcolo num atomico
 		num_atomic_figlio = rand_num_atom(1, num_atomic);
 		num_atomic=num_atomic-num_atomic_figlio;
+		
+		//Calcolo energia liberata energy(n1,n2) = n1 * n2 - max(n1 | n2)
+		energia_liberata = energy(num_atomic, num_atomic_figlio);
+		
+		stats->q_energia_prodotta_sec++;
+		stats->q_energia_prodotta_tot+=energia_liberata;
+
 		sprintf(param1,"%d",num_atomic_figlio);
 		sprintf(param2,"%d",min_numero_atomico);
 		sprintf(param3,"%d",master_pid);
@@ -96,6 +106,7 @@ int main(int argc, char * argv[]){
 		//carico i dati dentro le stats
 		stats->n_scissioni_tot++;
 		stats->n_scissioni_sec++;
+
 		sem_release(sem_id,SEM_STATS,1);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
@@ -122,4 +133,24 @@ int main(int argc, char * argv[]){
 	
 	dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
 
+}
+
+int energy(int n1, int n2){
+	int energia_liberata = 0;
+
+	if (n1 == n2){
+		//energia_liberata = max
+		energia_liberata = n1 * n2;
+	}else if (n1 == 1 || n2 == 1){
+		energia_liberata = 0;
+	}else{
+		//energia_liberata = prodotta - consumata
+		if (n1 > n2){
+			energia_liberata = n1 * n2 - n1;
+		} else {
+			energia_liberata = n1 * n2 - n2;
+		}
+	}
+	
+	return energia_liberata;			
 }

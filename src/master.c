@@ -54,7 +54,6 @@ int main(){
 	char param5[20];
 	char *args[7];
 
-
 	//Creazione alimentatore
 	strcpy(process_name,"alimentatore");
 	sprintf(param1,"%d",settings.step);
@@ -113,12 +112,22 @@ int main(){
 	wait_to_zero(sem_id,SEM_READY);
 	alarm(settings.sim_duration);
 	dprintf(1,"La simulazione e iniziata\n");
-	int energia_disponibile;
+	//todo: da modificare energia disponibile
+	int energia_disponibile = 300;
+	int energia_liberata = 0;
 
 	while (1){
 		sleep(1);
 		sem_reserve(sem_id,SEM_STATS);
 		stats->q_energia_consumata_tot+=settings.energy_demand;
+
+		// energia_liberata = stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
+		// if (energia_liberata > settings.energy_explode_threshold){
+		// 	dprintf(1,"energy_prod=%d\n", stats->q_energia_prodotta_tot);
+		// 	dprintf(1,"energy=%d\n", energia_liberata);
+		// 	dprintf(1,"Explode\n");
+		// 	end();
+		// }
 		
 		energia_disponibile=stats->q_energia_prodotta_tot-stats->q_energia_consumata_tot;
 		if(energia_disponibile<settings.energy_demand){
@@ -188,15 +197,19 @@ void end(){
 }
 
 static void sigHandler(int signum){
-	if(signum==SIGTERM){
-		dprintf(1,"[MASTER]Programma finito con meltdown\n");
-		end();
-		//exit(EXIT_FAILURE);
-	}
-	else if(signum==SIGALRM){
-		dprintf(1,"[MASTER]Programma finito per timeout\n");
-		end();
-		exit(EXIT_SUCCESS);
-		
+	switch (signum){
+		case SIGTERM:
+			dprintf(1,"[MASTER]Programma finito con meltdown\n");
+			end();
+			exit(EXIT_FAILURE);
+			break;
+		case SIGALRM:
+			dprintf(1,"[MASTER]Programma finito per timeout\n");
+			end();
+			exit(EXIT_SUCCESS);
+			break;
+		default:
+			dprintf(1, "Segnale non riconosciuto\n");
+			break;
 	}
 }
