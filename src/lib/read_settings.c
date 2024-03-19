@@ -7,9 +7,6 @@
 #include "utils.h"
 #include <errno.h>
 
-
-
-
 /*Lo scopo finale di questo file e riempire questa struttura*/
 settings_info si={5,5,5,5,5,5,5,5};
 /*file da cui si leggera il file*/
@@ -63,25 +60,23 @@ void make_default_settings_file(){
 	fputs(string_default_settings,configFile);
 	fclose(configFile);
 }
+
 int verify_file(char *path){
-	
+
 	int status;
 	configFile=fopen(path, "r");
 	// checking if the file is opened successfully
 	if (configFile == NULL) {
-		printf("File non trovato\n");
-		printf("Sto generando il file opt.conf con i valori di default");
+		dprintf(1,"File non trovato\n");
+		dprintf(1,"Sto generando il file opt.conf con i valori di default\n");
 		make_default_settings_file();
 		status=1;
-
 	}else{
 		fclose(configFile);
 		status=0;
 	}
 	return status;
 }
-
-
 
 void printSettings(settings_info s){
 	printf("\n"
@@ -104,11 +99,10 @@ void printSettings(settings_info s){
 	);
 }
 
-settings_info readSettings(){
+settings_info readSettings(char* path){
 	int settings_founded=0;
 
 	//default path of setting's file
-	char* path="opt.conf";
 	settings_info sett;
 	configFile = fopen(path, "r");
 	//token myToken;
@@ -116,7 +110,6 @@ settings_info readSettings(){
 	peek=' ';
 	move();
 	start();
-	//printf("Input OK\n");
 	//printSettings(si);
 	fclose(configFile);
 	sett=si;

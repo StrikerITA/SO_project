@@ -13,15 +13,25 @@ static void sigHandler(int signum);
 
 pid_t alimentatore;
 
-int main(){
+int main(int argc, char * argv[]){
+	char *path;
 	srand(getpid());
 	//TODO:Finire gestione se trova o meno il file
-	verify_file("opt.conf");
+	
+	if (argv[1] == NULL){
+		path = "opt.conf";
+	}else{
+		path = argv[1];
+	}
+	
+	verify_file(path);
 
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
 	signal(SIGUSR1,sigHandler); //explode
-	settings_info settings=readSettings();
+	signal(SIGINT,sigHandler); //explode
+	
+	settings_info settings=readSettings(path);
 	printSettings(settings);
 
 	//Dovrebbe essere NUM_ATOM+3/4
@@ -207,6 +217,11 @@ static void sigHandler(int signum){
 			break;
 		case SIGUSR1:
 			dprintf(1,"[MASTER]Programma finito per explode\n");
+			end();
+			break;
+		case SIGINT:
+			dprintf(1,"\n[MASTER]Programma finito per SIGINT\n");
+			dprintf(1,"[MASTER]Rimozione processi attivi...\n");
 			end();
 			break;
 		default:
