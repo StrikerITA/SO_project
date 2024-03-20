@@ -48,6 +48,8 @@ void make_default_settings_file();
 int verify_file(char *path);
 void printSettings(settings_info s);
 settings_info readSettings(char* path);
+void verifySettings(settings_info sett);
+int isNegORLong(int sett);
 void move();
 void match(tokens_tags tt);
 void start();
@@ -58,8 +60,3 @@ void setToken(tokens_tags tt,char *lexemma);
 char readch();
 void getToken();
 int isNumber(char s[]);
-
-
-
-
-

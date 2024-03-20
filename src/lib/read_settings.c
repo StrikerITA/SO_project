@@ -8,7 +8,7 @@
 #include <errno.h>
 
 /*Lo scopo finale di questo file e riempire questa struttura*/
-settings_info si={5,5,5,5,5,5,5,5};
+settings_info si={-1,-1,-1,-1,-1,-1,-1,-1};
 /*file da cui si leggera il file*/
 FILE *configFile;
 /*Carattere utilizzato per svolgere le operazioni in getToken()*/
@@ -100,8 +100,7 @@ void printSettings(settings_info s){
 }
 
 settings_info readSettings(char* path){
-	int settings_founded=0;
-
+	int flag = 0; 
 	//default path of setting's file
 	settings_info sett;
 	configFile = fopen(path, "r");
@@ -110,20 +109,76 @@ settings_info readSettings(char* path){
 	peek=' ';
 	move();
 	start();
-	//printSettings(si);
 	fclose(configFile);
-	sett=si;
+	sett = si;
+
+	verifySettings(sett);
+	
 	return sett;
 }
-/*
-if (argc != 2) {
-    fprintf(stderr, RED "[ERROR]" NC
-                        ": No string argument provided! \n"
-                        "You must provide a program path as argument\n");
-    exit(EXIT_FAILURE);
-  }
 
-  */
+void verifySettings(settings_info sett){
+	int check = isNegORLong(sett.step);
+	if (check < 0){
+		dprintf(1, "Step e' superiore a 9 cifre\n");
+		exit(EXIT_FAILURE);
+	}else if (check == 1){
+		dprintf(1, "Step e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+
+	check = isNegORLong(sett.energy_demand);
+	if (check == 1){
+		dprintf(1, "Energy Demand e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	check = isNegORLong(sett.energy_explode_threshold);
+	if (check == 1){
+		dprintf(1, "Energy Explode e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+
+	check = isNegORLong(sett.min_n_atomico);
+	if (check == 1){
+		dprintf(1, "Min_N_Atomico e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+
+	check = isNegORLong(sett.n_atom_init);
+	if (check == 1){
+		dprintf(1, "N_Atom_Init e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	check = isNegORLong(sett.n_atom_max);
+	if (check == 1){
+		dprintf(1, "N_Atom_Max e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+
+	check = isNegORLong(sett.n_nuovi_atomi);
+	if (check == 1){
+		dprintf(1, "N_Nuovi_Atomi e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+
+	check = isNegORLong(sett.sim_duration);
+	if (check == 1){
+		dprintf(1, "Sim_Duration e' negativo\n");
+		exit(EXIT_FAILURE);
+	}
+}
+
+int isNegORLong(int sett){
+	int flag = 0;
+	if (sett >= 1000000000){
+		flag = -1;
+	}else if (sett < 0){
+		flag = 1;
+	}
+	return flag;
+} 
 
 void move(){
 	getToken();
@@ -143,26 +198,19 @@ void match(tokens_tags tt){
 }
 
 void start(){
-	if(tok.tag==ENERGY_DEMAND ||tok.tag==N_ATOMI_INIT ||tok.tag==N_ATOMI_MAX ||tok.tag==MIN_N_ATOMICO ||tok.tag==SIM_DURATION ||tok.tag==STEP || tok.tag==N_NUOVI_ATOMI ||tok.tag==ENERGY_EXPLODE_THRESHOLD){
-		
+	if(tok.tag==ENERGY_DEMAND ||tok.tag==N_ATOMI_INIT ||tok.tag==N_ATOMI_MAX ||tok.tag==MIN_N_ATOMICO ||tok.tag==SIM_DURATION ||tok.tag==STEP || tok.tag==N_NUOVI_ATOMI ||tok.tag==ENERGY_EXPLODE_THRESHOLD){	
 		statlist();
-
 		match(END);
-
 	}else{
 		fprintf(stderr,"Il simbolo %s non e riconosciuto\n",tok.lexemme);
 		exit(EXIT_FAILURE);
 	}
 }
 
-
-
 void statlist(){
 	if(tok.tag==ENERGY_DEMAND ||tok.tag==N_ATOMI_INIT ||tok.tag==N_ATOMI_MAX ||tok.tag==MIN_N_ATOMICO ||tok.tag==SIM_DURATION ||tok.tag==STEP || tok.tag==N_NUOVI_ATOMI||tok.tag==ENERGY_EXPLODE_THRESHOLD){
-		
 		stat();
 		statlistp();
-
 	}else{
 		fprintf(stderr,"Il simbolo %s non e riconosciuto\n",tok.lexemme);
 		exit(EXIT_FAILURE);
@@ -170,9 +218,9 @@ void statlist(){
 	
 
 }
+
 void statlistp(){
 	if(tok.tag==ENERGY_DEMAND ||tok.tag==N_ATOMI_INIT ||tok.tag==N_ATOMI_MAX ||tok.tag==MIN_N_ATOMICO ||tok.tag==SIM_DURATION ||tok.tag==STEP || tok.tag==N_NUOVI_ATOMI||tok.tag==ENERGY_EXPLODE_THRESHOLD){
-		
 		stat();
 		statlistp();
 	}else if(tok.tag!=END){
@@ -180,6 +228,7 @@ void statlistp(){
 		exit(EXIT_FAILURE);
 	}
 }
+
 void stat(){
 	int n;
 	switch (tok.tag){
@@ -263,15 +312,18 @@ void stat(){
 		break;
 	}
 }
+
 void setToken(tokens_tags tt,char *lexemma){
 	tok.tag= tt;
 	strcpy(tok.lexemme,lexemma);
 }
+
 char readch(){
 	char ch=(char) fgetc(configFile);
 	//printf("Ho letto %c\n",ch);
 	return ch;
 }
+
 void getToken(){
 	while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r'){
 		peek=readch();
@@ -347,8 +399,6 @@ void getToken(){
 		}
 	}
 }
-
-
 
 //***********************************************************
 //UTILITY

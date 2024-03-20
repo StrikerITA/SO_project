@@ -28,8 +28,8 @@ int main(int argc, char * argv[]){
 
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
-	signal(SIGUSR1,sigHandler); //explode
-	signal(SIGINT,sigHandler); //explode
+	signal(SIGUSR1,sigHandler); //Explode
+	signal(SIGINT,sigHandler); //CTRL + C
 	
 	settings_info settings=readSettings(path);
 	printSettings(settings);
