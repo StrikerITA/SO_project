@@ -195,13 +195,16 @@ void print_stats(statistic *stats){
 
 void end(){
 	kill(alimentatore,SIGTERM);
-	//detach_memory_block(stats);
+	int sem_id = sem_get(PATHNAME);
+	
+	sem_reserve(sem_id, SEM_STATS);
+	statistic *stats=attach_memory_block(PATHNAME);
+	print_stats(stats);
+	detach_memory_block(stats);
+	sem_release(sem_id, SEM_STATS, 1);
+
 	sem_destroy(PATHNAME);
-	//dprintf(1,"Semaforo Rimosso\n");
 	destroy_memory_block(PATHNAME);
-	//dprintf(1,"Memoria Condivisa Rimossa\n");
-	/*dprintf(1,"============Statistiche Finali============");
-	print_stats(stats);*/
 	exit(EXIT_SUCCESS);
 }
 
