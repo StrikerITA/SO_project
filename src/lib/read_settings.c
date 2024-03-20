@@ -39,21 +39,21 @@ void make_default_settings_file(){
 	char string_default_settings[]="#prototipo di file predefinito\n"
 			"#!IMPORTANTE: questo documento deve essere nella stessa cartella che il programma chiamante\n"
 			"#Quantita di energia che dovra prelevare il MASTER ogni secondo\n"
-			"ENERGY_DEMAND=7;\n"
+			"ENERGY_DEMAND=10;\n"
 			"#Numero processi atomo che genera il MASTER\n"
-			"N_ATOMI_INIT=7;\n"
+			"N_ATOMI_INIT=50;\n"
 			"#Massimo numero atomico di un atomo,deve essere >=1\n"
-			"N_ATOMI_MAX=7;\n"
+			"N_ATOMI_MAX=50;\n"
 			"#Numero atomico minimo che puo avere un atomo per scindersi\n"
-			"MIN_N_ATOMICO=7;\n"
+			"MIN_N_ATOMICO=2;\n"
 			"#Durata della simulazione in nanosecondi\n"
-			"SIM_DURATION=7;\n"
+			"SIM_DURATION=6\n"
 			"#Numero nanosecondi che aspettera l' ALIMENTATORE prima di emettere nuovi atomi\n"
-			"STEP=7;\n"
+			"STEP=999999999;\n"
 			"#Numero di atomi che crea il processo ALIMENTATORE\n"
-			"N_NUOVI_ATOMI=7;\n"
+			"N_NUOVI_ATOMI=10;\n"
 			"#Soglia massima per evitare la Terminazione di tipo blackout\n"
-			"ENERGY_EXPLODE_THRESHOLD=7;\0";
+			"ENERGY_EXPLODE_THRESHOLD=700000;\0";
 
 	configFile=fopen("opt.conf","w");
 

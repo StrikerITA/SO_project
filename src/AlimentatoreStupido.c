@@ -53,7 +53,7 @@ int main(int argc, char * argv[]){
 		atomo=1;
 		for(int i=0;i<n_nuovi_atomi && atomo>0;i++){
 			//dprintf(1,"Creo arom");
-			strcpy(process_name,"atom");
+			strcpy(process_name,"atom.out");
 			//calcolo num_atomico
 			num_atomic=rand_num_atom(1, n_atom_max);
 			sprintf(param1,"%d",num_atomic);

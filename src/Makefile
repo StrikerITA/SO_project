@@ -1,9 +1,10 @@
 CFLAGS= -Wvla -Wextra -Werror
+DEPENDENCIES=lib/ipc_manager.c lib/read_settings.c lib/utils.c
 all:
-	gcc $(CFLAGS) master.c lib/ipc_manager.c lib/read_settings.c lib/utils.c -o master.out
-	gcc $(CFLAGS) atom.c lib/utils.c lib/ipc_manager.c -o atom.out                
-	gcc $(CFLAGS) AlimentatoreStupido.c lib/utils.c lib/ipc_manager.c -o alimentatore.out            
-	gcc $(CFLAGS) AttivatoreStupido.c lib/utils.c lib/ipc_manager.c -o attivatore.out 
+	gcc $(CFLAGS) %.c $(DEPENDENCIES)  -o master.out
+	gcc $(CFLAGS) atom.c $(DEPENDENCIES) -o atom.out                
+	gcc $(CFLAGS) AlimentatoreStupido.c $(DEPENDENCIES) -o alimentatore.out            
+	gcc $(CFLAGS) AttivatoreStupido.c $(DEPENDENCIES) -o attivatore.out 
 
 clear: 
-	rm master.out atom.out attivatore.out alimentatore.out
+	rm *.out

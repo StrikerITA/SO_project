@@ -18,7 +18,7 @@ int main(int argc, char * argv[]){
 	srand(getpid());
 	//TODO:Finire gestione se trova o meno il file
 	
-	if (argv[1] == NULL){
+	if (argc < 2){
 		path = "opt.conf";
 	}else{
 		path = argv[1];
@@ -67,7 +67,7 @@ int main(int argc, char * argv[]){
 	char *args[8];
 
 	//Creazione alimentatore
-	strcpy(process_name,"alimentatore");
+	strcpy(process_name,"alimentatore.out");
 	sprintf(param1,"%d",settings.step);
 	sprintf(param2,"%d",settings.n_nuovi_atomi);
 	sprintf(param3,"%d",(int)master);
@@ -87,7 +87,7 @@ int main(int argc, char * argv[]){
 	//dprintf(1,"PID ALIMENTATORE: %d\n",alimentatore);
 	
 	//Creazione attivatore
-	strcpy(process_name,"attivatore");
+	strcpy(process_name,"attivatore.out");
 	sprintf(param1,"%d",settings.n_nuovi_atomi);
 
 	args[0]=process_name;
@@ -99,7 +99,7 @@ int main(int argc, char * argv[]){
 	//dprintf(1,"%d-",attivatore);
 
 	//Creazione atomo
-	strcpy(process_name,"atom");
+	strcpy(process_name,"atom.out");
 	
 	//TODO: da calcolare con funzione randomica
 	int num_atomic=10;

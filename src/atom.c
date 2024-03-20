@@ -38,7 +38,7 @@ int main(int argc, char * argv[]){
 	char *args[8];
 
 	srand(getpid());
-	strcpy(process_name,"atom");
+	strcpy(process_name,"atom.out");
 	args[0]=process_name;
 
 	//Finite preparazioni

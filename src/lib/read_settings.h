@@ -47,7 +47,7 @@ typedef struct{
 void make_default_settings_file();
 int verify_file(char *path);
 void printSettings(settings_info s);
-settings_info readSettings();
+settings_info readSettings(char* path);
 void move();
 void match(tokens_tags tt);
 void start();
