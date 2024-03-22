@@ -1,10 +1,33 @@
-CFLAGS= -Wvla -Wextra -Werror
+CFLAGS= -Wvla -Wextra -Werror -D_GNU_SOURCE
 DEPENDENCIES=lib/ipc_manager.c lib/read_settings.c lib/utils.c
-all:
-	gcc $(CFLAGS) master.c $(DEPENDENCIES)  -o master.out
-	gcc $(CFLAGS) atom.c $(DEPENDENCIES) -o atom.out                
-	gcc $(CFLAGS) alimentatore.c $(DEPENDENCIES) -o alimentatore.out            
+
+all: master atom alimentatore attivatore
+
+master:
+	gcc $(CFLAGS) master.c $(DEPENDENCIES)  -o master.out 
+atom:
+	gcc $(CFLAGS) atom.c $(DEPENDENCIES) -o atom.out 
+alimentatore:
+	gcc $(CFLAGS) alimentatore.c $(DEPENDENCIES) -o alimentatore.out 
+attivatore:
 	gcc $(CFLAGS) attivatore.c $(DEPENDENCIES) -o attivatore.out 
+
+
+
+debug: dmaster datom dalimentatore dattivatore
+
+d_no_atom:dmaster atom dalimentatore dattivatore
+
+dmaster:
+	gcc $(CFLAGS) master.c $(DEPENDENCIES)  -o master.out -DDEBUG
+datom:
+	gcc $(CFLAGS) atom.c $(DEPENDENCIES) -o atom.out -DDEBUG
+dalimentatore:
+	gcc $(CFLAGS) alimentatore.c $(DEPENDENCIES) -o alimentatore.out -DDEBUG
+dattivatore:
+	gcc $(CFLAGS) attivatore.c $(DEPENDENCIES) -o attivatore.out -DDEBUG
+
+
 
 clear: 
 	rm *.out

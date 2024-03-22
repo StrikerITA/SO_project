@@ -80,14 +80,16 @@ int verify_file(char *path){
 
 void printSettings(settings_info s){
 	printf("\n"
-		"ENERGY_DEMAND: %d\n"
-		"N_ATOMI_INIT: %d\n"
-		"N_ATOMI_MAX: %d\n" 
-		"MIN_N_ATOMICO: %d\n"
-		"SIM_DURATION: %d\n"
-		"STEP: %d\n"
-		"N_NUOVI_ATOMI: %d\n"
-		"ENERGY_EXPLODE_THRESHOLD: %d\n",
+		"=================SETTINGS=================\n"
+		"ENERGY_DEMAND: \t\t\t%10d\n"
+		"N_ATOMI_INIT: \t\t\t%10d\n"
+		"N_ATOMI_MAX: \t\t\t%10d\n" 
+		"MIN_N_ATOMICO: \t\t\t%10d\n"
+		"SIM_DURATION: \t\t\t%10d\n"
+		"STEP: \t\t\t\t%10d\n"
+		"N_NUOVI_ATOMI: \t\t\t%10d\n"
+		"ENERGY_EXPLODE_THRESHOLD: \t%10d\n"
+		"==========================================\n",
 		s.energy_demand,
 		s.n_atom_init,
 		s.n_atom_max,

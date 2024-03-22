@@ -3,8 +3,14 @@
 #include "lib/utils.h"
 #include <string.h>
 #include <signal.h>
+#include <errno.h>
+
+
+
 
 #define PATHNAME "Makefile"
+
+void end_print();
 void stat_reset(statistic *stats);
 void print_stats(statistic *stats);
 //Return the pid of the children
@@ -32,8 +38,9 @@ int main(int argc, char * argv[]){
 	signal(SIGINT,sigHandler); //CTRL + C
 	
 	settings_info settings=readSettings(path);
+	dprintf(1,CYN);
 	printSettings(settings);
-
+	dprintf(1,RESET);
 	//Dovrebbe essere NUM_ATOM+3/4
 	//3 master+alimentatore+1atomo
 	int num_of_process=settings.n_atom_init+3;
@@ -41,20 +48,23 @@ int main(int argc, char * argv[]){
 	//Creo Semaforo e lo inizializzo
 	int sem_id,shmem_id;
 	sem_id=sem_create(PATHNAME);
-	//dprintf(1,"Semaforo Creato con id: %d\n",sem_id);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creato Semaforo con id %d\n"RESET,sem_id);
+#endif
+
 	sem_set_val(sem_id,SEM_READY,num_of_process);
 	sem_set_val(sem_id,SEM_ACTIVATOR,0);
 	sem_set_val(sem_id,SEM_STATS,1);
 
 	//Creo Memoria Condivisa e la inizializzo
 	shmem_id=create_shmem(PATHNAME);
-	//dprintf(1,"Memoria Condivisa con id: %d\n",shmem_id);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creata memoria condivisa con id %d\n"RESET,shmem_id);
+#endif
 
 	//Si attacca alla memoria condivisa, e inizializza le statistiche a zero
 	statistic *stats=attach_memory_block(PATHNAME);
 	bzero(stats,sizeof(statistic));
-	//print_stats(stats);
-	
 	pid_t  atomo, attivatore, master;
 	master=getpid();
 	char process_name[20];
@@ -84,7 +94,9 @@ int main(int argc, char * argv[]){
 	args[7]=NULL;
 	
 	alimentatore=create_process(process_name,args,master);
-	//dprintf(1,"PID ALIMENTATORE: %d\n",alimentatore);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creato processo alimentatore\n"RESET);
+#endif
 	
 	//Creazione attivatore
 	strcpy(process_name,"attivatore.out");
@@ -96,7 +108,10 @@ int main(int argc, char * argv[]){
 	args[3]=NULL;
 	args[4]=NULL;
 	attivatore=create_process(process_name,args,master);
-	//dprintf(1,"%d-",attivatore);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creato processo attivatore\n"RESET);
+#endif
+
 
 	//Creazione atomo
 	strcpy(process_name,"atom.out");
@@ -117,14 +132,28 @@ int main(int argc, char * argv[]){
 	args[6]=NULL;
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
+		num_atomic=rand_num_atom(1, settings.n_atom_max);
+		args[1]=param1;
+		sprintf(param1,"%d",num_atomic);
 		atomo=create_process(process_name,args,master);
-		//dprintf(1,"%d-",atomo);
+
+	}
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creati %d processi atomo\n"RESET,settings.n_atom_init);
+#endif
+
+	sem_reserve(sem_id,SEM_READY);
+	if(errno==EIDRM ||errno==EINVAL){
+		exit(EXIT_SUCCESS);
 	}
 	
-	// ! Le Preparazioni sono Pronte
-	sem_reserve(sem_id,SEM_READY);
-	//printf(1,"[MASTER]Ho prelevato 1 r\n");
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER] Aspetto avvio simulazione\n"RESET);
+#endif
 	wait_to_zero(sem_id,SEM_READY);
+	if(errno==EIDRM ||errno==EINVAL){
+		exit(EXIT_SUCCESS);
+	}
 	alarm(settings.sim_duration);
 	dprintf(1,"La simulazione e iniziata\n");
 	//todo: da modificare energia disponibile
@@ -132,13 +161,26 @@ int main(int argc, char * argv[]){
 	int energia_liberata = 0;
 
 	while (1){
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Aspetto 1 secondo\n"RESET);
+#endif
 		sleep(1);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Richiedo 1 risorsa a SEM_STAT\n"RESET);
+#endif
 		sem_reserve(sem_id,SEM_STATS);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
 		energia_disponibile=stats->q_energia_prodotta_tot - stats->q_energia_consumata_tot;
-
+		
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Energia Disponibile %d\n"RESET,energia_disponibile);
+#endif
 		if(energia_disponibile<settings.energy_demand){
-			dprintf(1,"[MASTER]Programma finito con blackout\n");
 			end();
+			dprintf(1,RED"[MASTER]Programma finito con blackout\n"RESET);
+			exit(EXIT_SUCCESS);
 			//TODO: DA finire gestione errore
 		}	
 		stats->q_energia_consumata_tot+=settings.energy_demand;
@@ -148,11 +190,16 @@ int main(int argc, char * argv[]){
 		stat_reset(stats);
 
 		sem_release(sem_id,SEM_STATS,1);
+		if(errno==EIDRM ||errno==EINVAL){
+			exit(EXIT_SUCCESS);
+		}
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Rilascio 1 risorsa a SEM_STAT\n"RESET);
+#endif
+
 	}
 	
-	/*for(int i=0;i<settings.sim_duration;i++){
-		
-	}*/
+
 	end();
 }
 
@@ -163,22 +210,38 @@ void stat_reset(statistic *stats){
 	stats->q_energia_consumata_sec=0;
 	stats->n_scorie_sec=0;
 }
-
+void end_print(){
+	statistic *stats=attach_memory_block(PATHNAME);
+	dprintf(1,"\n"CYN
+		"=================FINE STATS===============\n"
+		"Numero attivazioni totali: \t%10d\n"
+		"Numero scissioni totali: \t%10d\n"
+		"Quantita energia prodotta: \t%10d\n"
+		"Quantita energia consumata: \t%10d\n"
+		"Numero scorie totali: \t\t%10d\n"
+		"==========================================\n\n"RESET,
+		stats->n_attivazioni_tot,
+		stats->n_scissioni_tot,
+		stats->q_energia_prodotta_tot,
+		stats->q_energia_consumata_tot,
+		stats->n_scorie_tot
+	);
+}
 void print_stats(statistic *stats){
 	//TODO:Da modificare non va bene il printf sostituirla con una stampa non bufferizzata
-	dprintf(1,//my_message,
-		"================Statistiche===============\n"
-		"Numero attivazioni totali: %d\n"
-		"Numero attivazioni al secondo: %d\n"
-		"Numero scissioni totali: %d\n"
-		"Numero scissioni al secondo: %d\n"
-		"Quantita energia prodotta: %d\n"
-		"Quantita energia prodotta al secondo: %d\n"
-		"Quantita energia consumata: %d\n"
-		"Quantita energia consumata al secondo: %d\n"
-		"Numero scorie totali: %d\n"
-		"Numero scorie nel ultimo secondo: %d\n"
-		"==========================================\n",
+	dprintf(1,"\n"CYN
+		"====================Statistiche===================\n"
+		"Numero attivazioni totali: \t\t%10d\n"
+		"Numero attivazioni al secondo: \t\t%10d\n"
+		"Numero scissioni totali: \t\t%10d\n"
+		"Numero scissioni al secondo: \t\t%10d\n"
+		"Quantita energia prodotta: \t\t%10d\n"
+		"Quantita energia prodotta al secondo: \t%10d\n"
+		"Quantita energia consumata: \t\t%10d\n"
+		"Quantita energia consumata al secondo: \t%10d\n"
+		"Numero scorie totali: \t\t\t%10d\n"
+		"Numero scorie nel ultimo secondo: \t%10d\n"
+		"==================================================\n\n"RESET,
 		stats->n_attivazioni_tot,
 		stats->n_attivazioni_sec,
 		stats->n_scissioni_tot,
@@ -190,45 +253,48 @@ void print_stats(statistic *stats){
 		stats->n_scorie_tot,
 		stats->n_scorie_sec
 	);
-	//printf("%s",my_message);
 }
 
 void end(){
 	kill(alimentatore,SIGTERM);
-	int sem_id = sem_get(PATHNAME);
-	
-	sem_reserve(sem_id, SEM_STATS);
-	statistic *stats=attach_memory_block(PATHNAME);
-	print_stats(stats);
-	detach_memory_block(stats);
-	sem_release(sem_id, SEM_STATS, 1);
-
 	sem_destroy(PATHNAME);
+#ifdef DEBUG
+		dprintf(1,YEL"[MASTER-DEBUG]Semaforo distrutto\n"RESET);
+#endif
+	end_print();
 	destroy_memory_block(PATHNAME);
-	exit(EXIT_SUCCESS);
+#ifdef DEBUG
+	dprintf(1,YEL"[MASTER-DEBUG]Memoria condivisa distrutta\n"RESET);
+#endif
+	
 }
 
 static void sigHandler(int signum){
 	switch (signum){
 		case SIGTERM:
-			dprintf(1,"[MASTER]Programma finito con meltdown\n");
 			end();
+			dprintf(1,RED"[MASTER]Programma finito con meltdown\n"RESET);
+			exit(EXIT_SUCCESS);
 			break;
 		case SIGALRM:
-			dprintf(1,"[MASTER]Programma finito per timeout\n");
 			end();
+			dprintf(1,RED"[MASTER]Programma finito per timeout\n"RESET);
+			exit(EXIT_SUCCESS);
 			break;
 		case SIGUSR1:
-			dprintf(1,"[MASTER]Programma finito per explode\n");
 			end();
+			dprintf(1,RED"[MASTER]Programma finito per explode\n"RESET);
+			exit(EXIT_SUCCESS);
 			break;
 		case SIGINT:
-			dprintf(1,"\n[MASTER]Programma finito per SIGINT\n");
-			dprintf(1,"[MASTER]Rimozione processi attivi...\n");
 			end();
+			dprintf(1,RED"[MASTER]Programma finito per SIGINT\n"RESET);
+			exit(EXIT_SUCCESS);
 			break;
 		default:
-			dprintf(1, "Segnale non riconosciuto\n");
+			end();
+			dprintf(1, RED"Segnale non riconosciuto\n"RESET);
+			exit(EXIT_SUCCESS);
 			break;
 	}
 }

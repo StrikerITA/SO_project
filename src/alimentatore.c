@@ -35,14 +35,14 @@ int main(int argc, char * argv[]){
 	char *args[7];
 	int num_atomic;
 
-	//dprintf(1,"[ALIMENTATORE]L'alimentatore %d e stato creato\n",getpid());
 	signal(SIGTERM,sigHandler);
 	struct timespec my_time;
 	
 	sem_reserve(sem_id,SEM_READY);
-	//dprintf(1,"[ALIMENTATORE]Ho prelevato 1 r\n");
+#ifdef DEBUG 
+	dprintf(1,"[DALIMENTATORE] Aspetto avvio simulazione\n");
+#endif
 	wait_to_zero(sem_id,SEM_READY);
-	//dprintf(1,"[ALIMENTATORE]start\n");
 	
 	while(true){
 		my_time.tv_sec = 0;
@@ -69,9 +69,11 @@ int main(int argc, char * argv[]){
 			args[5]=param5;
 			args[6]=NULL;
 			atomo=create_process(process_name,args,master);
+			
 		}
-
-		
+#ifdef DEBUG
+	dprintf(1,YEL"[DALIMENTATORE]Ho creato %d atomi\n"RESET,n_nuovi_atomi);
+#endif
 	}
 }
 static void sigHandler(int signum){

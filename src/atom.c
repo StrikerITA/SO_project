@@ -48,6 +48,9 @@ int main(int argc, char * argv[]){
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
+#ifdef DEBUG 
+	dprintf(1,"[DATOM] Aspetto avvio simulazione\n");
+#endif
 		wait_to_zero(sem_id,SEM_READY);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
@@ -56,11 +59,12 @@ int main(int argc, char * argv[]){
 	
 	int num_atomic_figlio;
 	int energia_liberata;
+	int new_num_atom=-1;
 
 	while(true){
-		//sleep(1);
 		//Chiedo scissione
 		sem_reserve(sem_id, SEM_ACTIVATOR);
+
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
@@ -76,16 +80,26 @@ int main(int argc, char * argv[]){
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}
-
 			exit(EXIT_SUCCESS);
 		}
+#ifdef DEBUG
+#endif
 		//Calcolo num atomico
-		num_atomic_figlio = rand_num_atom(1, num_atomic);
-		num_atomic=num_atomic-num_atomic_figlio;
-		
+		num_atomic_figlio = rand_num_atom(1, num_atomic-1);
+		new_num_atom=num_atomic-num_atomic_figlio;
+#ifdef DEBUG
+	//dprintf(1,"[ATOMO-DEBUG]Num_atomic: %d,New_num_atom:%d, Num_atomic_figlio: %d\n",num_atomic,new_num_atom,num_atomic_figlio);
+
+	///dprintf(1,"[ATOMO-DEBUG]Num: %d\n",energia_liberata);
+#endif
+		num_atomic=new_num_atom;
 		//Calcolo energia liberata energy(n1,n2) = n1 * n2 - max(n1 | n2)
 		energia_liberata = energy(num_atomic, num_atomic_figlio);
-		//dprintf(1,"%d \n",energia_liberata);
+		
+#ifdef DEBUG
+	dprintf(1,YEL"[ATOMO-DEBUG]Energia liberata: %d\n"RESET,energia_liberata);
+#endif
+		
 		sprintf(param1,"%d",num_atomic_figlio);
 		sprintf(param2,"%d",min_numero_atomico);
 		sprintf(param3,"%d",master_pid);
@@ -100,6 +114,10 @@ int main(int argc, char * argv[]){
 
 		//creazione nuovo atomo
 		atomo=create_process(process_name, args, master_pid);
+		
+#ifdef DEBUG 
+	dprintf(1,YEL"[DATOM] Ho fatto la scissione\n"RESET);
+#endif
 
 		sem_reserve(sem_id,SEM_STATS);
 		if(errno==EIDRM ||errno==EINVAL){
@@ -111,7 +129,9 @@ int main(int argc, char * argv[]){
 		stats->q_energia_prodotta_tot+=energia_liberata;
 		
 		if (stats->q_energia_prodotta_tot > energy_explode_threshold){
-			//kill(SIGUSR1, master_pid);
+	#ifdef DEBUG
+			dprintf(1,RED"[DATOM]Genero errore explode\n"RESET);
+	#endif
 			kill(master_pid,SIGUSR1);
 			exit(EXIT_SUCCESS);
 		}
@@ -132,6 +152,7 @@ int main(int argc, char * argv[]){
 }
 
 int energy(int n1, int n2){	
+	int n=n1*n2;
 	return ((n1 * n2) - max(n1, n2));
 }
 

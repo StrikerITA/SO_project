@@ -12,15 +12,23 @@ int main(int argc, char * argv[]){
 	char *values=argv[0];
     int num_atomi_nuovi=atoi(argv[1]);
 	
-	//dprintf(1,"[ATTIVATORE]L'attivatore %d e stato creato\n",getpid());
 	statistic *stats=attach_memory_block(PATHNAME);
 	
 	sem_reserve(sem_id,SEM_READY);
-	//dprintf(1,"[ATTIVATORE]Ho prelevato 1 r\n");
+	if(errno==EIDRM ||errno==EINVAL){
+		exit(EXIT_SUCCESS);
+	}
+	
+#ifdef DEBUG 
+	dprintf(1,YEL"[DATTIVATORE] Aspetto avvio simulazione\n"RESET);
+#endif
 	wait_to_zero(sem_id,SEM_READY);
+	if(errno==EIDRM ||errno==EINVAL){
+		exit(EXIT_SUCCESS);
+	}
 
 
-	//dprintf(1,"[ATTIVATORE]start\n");
+	
 
 	int numero_attivazioni=-1;
 	while(true){
@@ -30,6 +38,9 @@ int main(int argc, char * argv[]){
 			exit(EXIT_SUCCESS);
 		}
 		numero_attivazioni = num_atom_generator_v2(num_atomi_nuovi);
+#ifdef DEBUG
+		dprintf(1,YEL"[DATTIVATORE]Numero di Attivazioni: %d\n"RESET,numero_attivazioni);
+#endif
 		sem_release(sem_id,SEM_ACTIVATOR, numero_attivazioni);
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
