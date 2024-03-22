@@ -60,5 +60,5 @@ int main(int argc, char * argv[]){
 		}
 	}
 	
-	//dprintf(1,"[ATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
+	//dprintf(1,"[DATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
 }

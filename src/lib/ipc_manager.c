@@ -101,3 +101,7 @@ int destroy_msgq(char *filename){
 	int msgq_id=get_msgq(filename);
 	return msgctl(msgq_id,IPC_RMID,NULL);
 }
+int send_message(char *filename){
+	struct msgbuff message;
+	message.type
+}

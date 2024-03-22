@@ -13,7 +13,6 @@ static void sigHandler(int signum);
 int main(int argc, char * argv[]){
 	srand(getpid());
 	int numero=argc;
-	//dprintf(1,"%d\n",numero);
 	int sem_id=sem_get(PATHNAME);
 
 	int step=atoi(argv[1]);
@@ -22,8 +21,7 @@ int main(int argc, char * argv[]){
 	int n_atom_max=atoi(argv[4]);
 	int min_n_atom=atoi(argv[5]);
 	int energy_explode_threshold = atoi(argv[6]);
-	//!cambio step per prove
-	//step=999999000;
+	
 
 	pid_t atomo;
 	char process_name[20];
@@ -52,7 +50,7 @@ int main(int argc, char * argv[]){
 		
 		atomo=1;
 		for(int i=0;i<n_nuovi_atomi && atomo>0;i++){
-			//dprintf(1,"Creo arom");
+	
 			strcpy(process_name,"atom.out");
 			//calcolo num_atomico
 			num_atomic=rand_num_atom(1, n_atom_max);
@@ -78,7 +76,9 @@ int main(int argc, char * argv[]){
 }
 static void sigHandler(int signum){
 	if(signum==SIGTERM){
-		//dprintf(1,"[ALIMENTATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
+#ifdef DEBUG
+	dprintf(1,YEL"[DALIMENTATORE]L'alimentatore %d ha finito la sua esecuzione\n"RESET,getpid());
+#endif
 		exit(EXIT_SUCCESS);
 	}
 }

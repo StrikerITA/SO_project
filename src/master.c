@@ -21,16 +21,15 @@ pid_t alimentatore;
 
 int main(int argc, char * argv[]){
 	char *path;
-	srand(getpid());
-	//TODO:Finire gestione se trova o meno il file
-	
+	srand(getpid());	
 	if (argc < 2){
 		path = "opt.conf";
 	}else{
 		path = argv[1];
 	}
-	
-	verify_file(path);
+	if(verify_file(path)==-1){
+		path = "opt.conf";
+	}
 
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
@@ -181,7 +180,6 @@ int main(int argc, char * argv[]){
 			end();
 			dprintf(1,RED"[MASTER]Programma finito con blackout\n"RESET);
 			exit(EXIT_SUCCESS);
-			//TODO: DA finire gestione errore
 		}	
 		stats->q_energia_consumata_tot+=settings.energy_demand;
 		stats->q_energia_consumata_sec+=settings.energy_demand;
@@ -198,8 +196,6 @@ int main(int argc, char * argv[]){
 #endif
 
 	}
-	
-
 	end();
 }
 

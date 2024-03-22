@@ -8,33 +8,15 @@
 #include <errno.h>
 
 /*Lo scopo finale di questo file e riempire questa struttura*/
-settings_info si={-1,-1,-1,-1,-1,-1,-1,-1};
+settings_info si={10,50,50,2,6,999999999,10,700000};
 /*file da cui si leggera il file*/
 FILE *configFile;
 /*Carattere utilizzato per svolgere le operazioni in getToken()*/
 char peek;
 token tok;
+int linea=0;
 
 
-/*int main(int argc,char* argv[]){
-	char *path="opt.inf";
-	//printf("%d %s\n",argc,argv[1]);
-	int status_file=-1;
-	if(argc==2){
-		status_file=verify_file(argv[1]);
-		if(status_file==0){
-			
-			path=argv[1];
-		}
-	}
-	
-	readSettings();
-}*/
-
-/*
-	Restituisce 0 se riesce ad aprire il file
-	Restituisce -1 se non lo trova, e si dovra procedere a crearlo
-*/
 void make_default_settings_file(){
 	char string_default_settings[]="#prototipo di file predefinito\n"
 			"#!IMPORTANTE: questo documento deve essere nella stessa cartella che il programma chiamante\n"
@@ -47,7 +29,7 @@ void make_default_settings_file(){
 			"#Numero atomico minimo che puo avere un atomo per scindersi\n"
 			"MIN_N_ATOMICO=2;\n"
 			"#Durata della simulazione in nanosecondi\n"
-			"SIM_DURATION=6\n"
+			"SIM_DURATION=6;\n"
 			"#Numero nanosecondi che aspettera l' ALIMENTATORE prima di emettere nuovi atomi\n"
 			"STEP=999999999;\n"
 			"#Numero di atomi che crea il processo ALIMENTATORE\n"
@@ -60,7 +42,10 @@ void make_default_settings_file(){
 	fputs(string_default_settings,configFile);
 	fclose(configFile);
 }
-
+/*
+	Restituisce 0 se riesce ad aprire il file
+	Restituisce -1 se non lo trova, e si dovra procedere a crearlo
+*/
 int verify_file(char *path){
 
 	int status;
@@ -70,7 +55,7 @@ int verify_file(char *path){
 		dprintf(1,"File non trovato\n");
 		dprintf(1,"Sto generando il file opt.conf con i valori di default\n");
 		make_default_settings_file();
-		status=1;
+		status=-1;
 	}else{
 		fclose(configFile);
 		status=0;
@@ -109,6 +94,7 @@ settings_info readSettings(char* path){
 	//token myToken;
 	setToken(ERROR,"");
 	peek=' ';
+	linea=1;
 	move();
 	start();
 	fclose(configFile);
@@ -184,17 +170,17 @@ int isNegORLong(int sett){
 
 void move(){
 	getToken();
+
 	//printf("token = %d\n",tok.tag);
 }
 
 void match(tokens_tags tt){
 	if(tok.tag==tt){
-		if (tok.tag!= END)
-                move();
-				
+		if (tok.tag!= END){
+			move();
+		}
 	}else{
-		//fprintf(stderr,"I Tag %d e il tag %d non sono uguali\n",tt,tok.tag);
-		fprintf(stderr,"Syntax error");
+		dprintf(1,"[ERRORE LETTURA IMPOSTAZIONI]linea %d:\tExpected another symbol\n",linea);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -204,7 +190,7 @@ void start(){
 		statlist();
 		match(END);
 	}else{
-		fprintf(stderr,"Il simbolo %s non e riconosciuto\n",tok.lexemme);
+		fprintf(stderr,"[ERRORE LETTURA IMPOSTAZIONI]linea %d:\tIl simbolo %s non e riconosciuto\n",linea,tok.lexemme);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -214,7 +200,7 @@ void statlist(){
 		stat();
 		statlistp();
 	}else{
-		fprintf(stderr,"Il simbolo %s non e riconosciuto\n",tok.lexemme);
+		fprintf(stderr,"[ERRORE LETTURA IMPOSTAZIONI]linea %d:\tIl simbolo %s non e riconosciuto\n",linea,tok.lexemme);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -226,7 +212,7 @@ void statlistp(){
 		stat();
 		statlistp();
 	}else if(tok.tag!=END){
-		fprintf(stderr,"Il simbolo %s non e riconosciuto\n",tok.lexemme);
+		fprintf(stderr,"[ERRORE LETTURA IMPOSTAZIONI]linea %d:\tIl simbolo %s non e riconosciuto\n",linea,tok.lexemme);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -328,6 +314,9 @@ char readch(){
 
 void getToken(){
 	while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r'){
+		if(peek=='\n'){
+			linea++;
+		}
 		peek=readch();
 	}
 	switch(peek){
@@ -335,6 +324,9 @@ void getToken(){
 			while(peek != '\n'&& peek!=(char)-1){
 				peek=readch();
 			}
+			/*if(peek=='\n'){
+				linea++;
+			}*/
 			getToken();
 			break; 
 		case '=':
