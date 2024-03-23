@@ -4,13 +4,11 @@ int sem_create(char *pathname){
 	key_t key;
 	key=ftok(pathname,SEMAPHORE);
 
-	//printf("La mia chiave e: %d\n",key);
+	
 	return semget(key,NUMBER_SEMAPHORES,IPC_CREAT| 0666| IPC_EXCL);
 }
 int sem_destroy(char *pathname){
-	//printf("La mia chiave e: %d\n",key);
 	int id=sem_get(pathname);
-	//printf("Il mio ID e: %d\n",id);
 	return semctl(id,NUMBER_SEMAPHORES,IPC_RMID);
 }
 int sem_get(char *pathname){
@@ -85,7 +83,29 @@ bool destroy_memory_block(char *filename){
 }
 
 //-----------------------------------------------
-//---------------Message-queue---------------
+//---------------MESSAGE-QUEUE---------------
+
+
+int send_message(char *filename,int type,int info){
+	struct msgbuff message;
+	message.msg_type=type;
+	message.my_pid=getpid();
+	message.info=info;
+	int msgq_id=get_msgq(filename);
+	
+	int ris=msgsnd(msgq_id,&message,(sizeof(int)+sizeof(pid_t)),0);
+	//gestione errori
+	return ris;	
+}
+
+struct msgbuff receive_message(char *filename,long msg_type){
+	struct msgbuff message;
+	int msgq_id=get_msgq(filename);
+	msgrcv(msgq_id,&message,(sizeof(int)+sizeof(pid_t)),msg_type,0);
+	//gestione errori
+	return message;
+}
+
 
 int create_msgq(char *filename){
     key_t key;
@@ -101,7 +121,4 @@ int destroy_msgq(char *filename){
 	int msgq_id=get_msgq(filename);
 	return msgctl(msgq_id,IPC_RMID,NULL);
 }
-int send_message(char *filename){
-	struct msgbuff message;
-	message.type
-}
+

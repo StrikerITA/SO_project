@@ -85,7 +85,7 @@ int main(int argc, char * argv[]){
 #ifdef DEBUG
 #endif
 		//Calcolo num atomico
-		num_atomic_figlio = rand_num_atom(1, num_atomic-1);
+		num_atomic_figlio = rand_generator(1, num_atomic-1);
 		new_num_atom=num_atomic-num_atomic_figlio;
 #ifdef DEBUG
 	//dprintf(1,"[ATOMO-DEBUG]Num_atomic: %d,New_num_atom:%d, Num_atomic_figlio: %d\n",num_atomic,new_num_atom,num_atomic_figlio);

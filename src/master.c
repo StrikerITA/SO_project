@@ -5,11 +5,8 @@
 #include <signal.h>
 #include <errno.h>
 
-
-
-
 #define PATHNAME "Makefile"
-
+int inib_yes_no();
 void end_print();
 void stat_reset(statistic *stats);
 void print_stats(statistic *stats);
@@ -18,8 +15,13 @@ void end();
 static void sigHandler(int signum);
 
 pid_t alimentatore;
+int inib_flag=-1;
 
 int main(int argc, char * argv[]){
+
+	// Scegli se attivare inibitore
+	inib_flag = inib_yes_no();
+
 	char *path;
 	srand(getpid());	
 	if (argc < 2){
@@ -30,6 +32,8 @@ int main(int argc, char * argv[]){
 	if(verify_file(path)==-1){
 		path = "opt.conf";
 	}
+
+	
 
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
@@ -42,11 +46,13 @@ int main(int argc, char * argv[]){
 	dprintf(1,RESET);
 	//Dovrebbe essere NUM_ATOM+3/4
 	//3 master+alimentatore+1atomo
-	int num_of_process=settings.n_atom_init+3;
+	int num_of_process=settings.n_atom_init+3+1*inib_flag;
 
 	//Creo Semaforo e lo inizializzo
 	int sem_id,shmem_id;
 	sem_id=sem_create(PATHNAME);
+	
+
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Creato Semaforo con id %d\n"RESET,sem_id);
 #endif
@@ -61,9 +67,20 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Creata memoria condivisa con id %d\n"RESET,shmem_id);
 #endif
 
+
+
 	//Si attacca alla memoria condivisa, e inizializza le statistiche a zero
 	statistic *stats=attach_memory_block(PATHNAME);
 	bzero(stats,sizeof(statistic));
+
+//Creo coda di messaggi
+	if(inib_flag){
+		create_msgq(PATHNAME);
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creata coda di messaggi con id %d\n"RESET, msgq_id);
+#endif
+	}
+
 	pid_t  atomo, attivatore, master;
 	master=getpid();
 	char process_name[20];
@@ -91,6 +108,7 @@ int main(int argc, char * argv[]){
 	args[5]=param5;
 	args[6]=param6;
 	args[7]=NULL;
+
 	
 	alimentatore=create_process(process_name,args,master);
 #ifdef DEBUG 
@@ -131,7 +149,7 @@ int main(int argc, char * argv[]){
 	args[6]=NULL;
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
-		num_atomic=rand_num_atom(1, settings.n_atom_max);
+		num_atomic=rand_generator(1, settings.n_atom_max);
 		args[1]=param1;
 		sprintf(param1,"%d",num_atomic);
 		atomo=create_process(process_name,args,master);
@@ -140,6 +158,14 @@ int main(int argc, char * argv[]){
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Creati %d processi atomo\n"RESET,settings.n_atom_init);
 #endif
+
+//Creo prcesso inibitore
+	if(inib_flag){
+		// attivazione processo inibitore
+#ifdef DEBUG 
+	dprintf(1,YEL"[DMASTER]Creato processo inibitore %d\n"RESET);
+#endif
+	}
 
 	sem_reserve(sem_id,SEM_READY);
 	if(errno==EIDRM ||errno==EINVAL){
@@ -224,7 +250,6 @@ void end_print(){
 	);
 }
 void print_stats(statistic *stats){
-	//TODO:Da modificare non va bene il printf sostituirla con una stampa non bufferizzata
 	dprintf(1,"\n"CYN
 		"====================Statistiche===================\n"
 		"Numero attivazioni totali: \t\t%10d\n"
@@ -262,7 +287,10 @@ void end(){
 #ifdef DEBUG
 	dprintf(1,YEL"[MASTER-DEBUG]Memoria condivisa distrutta\n"RESET);
 #endif
-	
+	destroy_msgq(PATHNAME); 
+#ifdef DEBUG
+	dprintf(1,YEL"[MASTER-DEBUG]Coda di messaggi distrutta\n"RESET);
+#endif
 }
 
 static void sigHandler(int signum){
@@ -293,4 +321,28 @@ static void sigHandler(int signum){
 			exit(EXIT_SUCCESS);
 			break;
 	}
+}
+
+
+int inib_yes_no(){
+	int flag = 1;
+	int res;
+	char my_char = ' ';
+	while(flag){
+		if(my_char != '\n')
+			dprintf(1, "[MASTER]Vuoi attivare il processo inibitore? [Y/n]\n");
+
+		scanf("%c",&my_char);
+		if(my_char == 'Y' || my_char == 'y'){
+			res = 1;
+			flag = 0;
+		}else if(my_char == 'N' || my_char == 'n'){
+			res = 0;
+			flag = 0;
+		}else if(my_char != '\n'){
+			dprintf(1, RED"[MASTER]Unknown character.\n\n"RESET);
+			my_char = ' ';
+		}
+	}
+	return res;
 }
