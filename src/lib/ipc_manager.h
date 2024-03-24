@@ -61,7 +61,7 @@ struct msgbuff{
 	pid_t my_pid;
 	/*
 		Se msgType=1 allora info sara energia liberata totale //assorbe 
-		Se msgType=2 allora info sara -1; //decidere se ce scissione o meno
+		Se msgType=1 allora info sara -1; //decidere se ce scissione o meno
 		Se msgType >2(pid processo richiedente) allora info sara 0/1 oppure
 		sara energia liberata inibita
 	*/

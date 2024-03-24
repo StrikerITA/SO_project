@@ -14,7 +14,7 @@ void print_stats(statistic *stats);
 void end();
 static void sigHandler(int signum);
 
-pid_t alimentatore;
+pid_t alimentatore, inibitore;
 int inib_flag=-1;
 
 int main(int argc, char * argv[]){
@@ -159,9 +159,17 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Creati %d processi atomo\n"RESET,settings.n_atom_init);
 #endif
 
-//Creo prcesso inibitore
+//Creo processo inibitore
 	if(inib_flag){
-		// attivazione processo inibitore
+		strcpy(process_name,"inibitore.out");
+
+		args[0]=process_name;
+		args[1]=NULL;
+		args[2]=NULL;
+		args[3]=NULL;
+		args[4]=NULL;
+		inibitore=create_process(process_name,args,master);
+
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Creato processo inibitore %d\n"RESET);
 #endif
@@ -278,18 +286,33 @@ void print_stats(statistic *stats){
 
 void end(){
 	kill(alimentatore,SIGTERM);
+#ifdef DEBUG
+	dprintf(1,YEL"[DMASTER]Mandato segnale di arresto al alimentatore\n"RESET);
+#endif
+	if(inib_flag){
+		kill(inibitore,SIGTERM);
+#ifdef DEBUG
+	dprintf(1,YEL"[DMASTER]Mandato segnale di arresto al inibitore\n"RESET);
+#endif
+	}
 	sem_destroy(PATHNAME);
 #ifdef DEBUG
-		dprintf(1,YEL"[MASTER-DEBUG]Semaforo distrutto\n"RESET);
+		dprintf(1,YEL"[DMASTER]Semaforo distrutto\n"RESET);
 #endif
 	end_print();
 	destroy_memory_block(PATHNAME);
 #ifdef DEBUG
-	dprintf(1,YEL"[MASTER-DEBUG]Memoria condivisa distrutta\n"RESET);
+	dprintf(1,YEL"[DMASTER]Memoria condivisa distrutta\n"RESET);
 #endif
-	destroy_msgq(PATHNAME); 
+	if(inib_flag){
+		destroy_msgq(PATHNAME); 
 #ifdef DEBUG
-	dprintf(1,YEL"[MASTER-DEBUG]Coda di messaggi distrutta\n"RESET);
+	dprintf(1,YEL"[DMASTER]Distrutta coda di messaggi\n"RESET);
+#endif
+
+	}
+#ifdef DEBUG
+	dprintf(1,YEL"[DMASTER]Coda di messaggi distrutta\n"RESET);
 #endif
 }
 

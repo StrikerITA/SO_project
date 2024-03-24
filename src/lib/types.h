@@ -29,7 +29,7 @@ typedef struct{
 	int n_scorie_tot;
 	int n_scorie_sec;
 	//versione "normal"
-	//int q_energia_assorbita;
+	int q_energia_assorbita;
 
 }statistic;
 
