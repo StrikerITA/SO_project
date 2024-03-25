@@ -73,3 +73,6 @@ struct msgbuff receive_message(char *filename,long msg_type);
 int create_msgq(char *filename);
 int get_msgq(char *filename);
 int destroy_msgq(char *filename);
+
+// !!! testing ricca
+int check_msgq(char *filename);

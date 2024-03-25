@@ -33,12 +33,10 @@ int main(int argc, char * argv[]){
 		path = "opt.conf";
 	}
 
-	
-
 	signal(SIGTERM,sigHandler);
 	signal(SIGALRM,sigHandler); 
 	signal(SIGUSR1,sigHandler); //Explode
-	signal(SIGINT,sigHandler); //CTRL + C
+	signal(SIGINT,sigHandler); //CTRL + C -> Enable/Disable Inibitore
 	
 	settings_info settings=readSettings(path);
 	dprintf(1,CYN);
@@ -75,7 +73,7 @@ int main(int argc, char * argv[]){
 
 //Creo coda di messaggi
 	if(inib_flag){
-		create_msgq(PATHNAME);
+		int msgq_id = create_msgq(PATHNAME);
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Creata coda di messaggi con id %d\n"RESET, msgq_id);
 #endif
@@ -171,22 +169,22 @@ int main(int argc, char * argv[]){
 		inibitore=create_process(process_name,args,master);
 
 #ifdef DEBUG 
-	dprintf(1,YEL"[DMASTER]Creato processo inibitore %d\n"RESET);
+	dprintf(1,YEL"[DMASTER]Creato processo inibitore \n"RESET);
 #endif
 	}
 
 	sem_reserve(sem_id,SEM_READY);
-	if(errno==EIDRM ||errno==EINVAL){
+	/*f(errno==EIDRM ||errno==EINVAL){
 		exit(EXIT_SUCCESS);
-	}
+	}*/
 	
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER] Aspetto avvio simulazione\n"RESET);
 #endif
 	wait_to_zero(sem_id,SEM_READY);
-	if(errno==EIDRM ||errno==EINVAL){
+	/*if(errno==EIDRM ||errno==EINVAL){
 		exit(EXIT_SUCCESS);
-	}
+	}*/
 	alarm(settings.sim_duration);
 	dprintf(1,"La simulazione e iniziata\n");
 	//todo: da modificare energia disponibile
@@ -202,9 +200,9 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Richiedo 1 risorsa a SEM_STAT\n"RESET);
 #endif
 		sem_reserve(sem_id,SEM_STATS);
-		if(errno==EIDRM ||errno==EINVAL){
+		/*if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
-		}
+		}*/
 		energia_disponibile=stats->q_energia_prodotta_tot - stats->q_energia_consumata_tot;
 		
 #ifdef DEBUG 
@@ -222,9 +220,9 @@ int main(int argc, char * argv[]){
 		stat_reset(stats);
 
 		sem_release(sem_id,SEM_STATS,1);
-		if(errno==EIDRM ||errno==EINVAL){
+		/*if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
-		}
+		}*/
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Rilascio 1 risorsa a SEM_STAT\n"RESET);
 #endif
@@ -317,6 +315,7 @@ void end(){
 }
 
 static void sigHandler(int signum){
+	int test;
 	switch (signum){
 		case SIGTERM:
 			end();
@@ -334,9 +333,19 @@ static void sigHandler(int signum){
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGINT:
-			end();
-			dprintf(1,RED"[MASTER]Programma finito per SIGINT\n"RESET);
-			exit(EXIT_SUCCESS);
+			// verifica esistenza coda di messaggi
+			test = get_msgq(PATHNAME);
+			dprintf(1, RED"msgq = %d, error %d\n", test, errno);
+			if (errno==ENOENT){
+				// coda msg F -> creo la coda di msg e invio il segnale SIGUSR1
+				create_msgq(PATHNAME);
+				dprintf(1,GRN"[MASTER]Inibitore attivato\n"RESET);
+				kill(inibitore, SIGUSR1);
+			}else{
+				// coda msg Y -> distruggo la coda msg
+				dprintf(1,GRN"[MASTER]Inibitore disattivato\n"RESET);
+				destroy_msgq(PATHNAME);
+			}
 			break;
 		default:
 			end();

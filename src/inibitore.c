@@ -13,7 +13,7 @@ int rand_energy(int energy_raw);
 
 int main(int argc, char *argv[]){
 	// filtrare errori argv
-
+	dprintf(1,"Sono stato creato\n");
 	int num_param=argc;
 	char *mia_variabile=argv[0];
 
@@ -39,12 +39,37 @@ int main(int argc, char *argv[]){
 	if(errno==EIDRM ||errno==EINVAL){
 		exit(EXIT_SUCCESS);
 	}
+	
 	while(true){
 		//ricezione messaggio
-		message=receive_message(PATHNAME,1);
-		if(errno==EIDRM ||errno==EINVAL){
+		dprintf(1,"coda\n");
+
+		dprintf(1, "num msg: %d", check_msgq(PATHNAME));
+		//!! si blocca in ricezione del messaggio
+
+		// se ci sono messaggi nella coda, accede
+		if (check_msgq(PATHNAME) > 0){
+			message=receive_message(PATHNAME,1);
+		}else{
+			//mando l'inibitore in wait
+			//errno = ENOMSG; // TEST
+		}
+
+		//TODO
+		/*
+			Atomi guardano un semaforo che viene aggiornato dal master 
+			per capire se usare o meno l'inibitore
+
+			l'inibitore non distrugge la coda dei messaggi
+			la puliamo mentre gli atomi non usano l'inibitore
+		*/
+		
+		dprintf(1," my errno %d\n",errno);
+		if(errno==EINTR || errno==EINVAL || errno==ENOMSG){
+			dprintf(1,"Vado in wait()");
 			wait(NULL);
 			msgq_id=get_msgq(PATHNAME);
+			dprintf(1,"Esco in wait()");
 			continue;
 		}
 		//DONE: verificare errno
@@ -70,7 +95,9 @@ int main(int argc, char *argv[]){
 		type=message.my_pid;
 		send_message(PATHNAME,type,info);
 		if(errno==EIDRM ||errno==EINVAL){
+			dprintf(1,"Vado in wait()");
 			wait(NULL);
+			dprintf(1,"Esco in wait()");
 			msgq_id=get_msgq(PATHNAME);
 			continue;
 		}

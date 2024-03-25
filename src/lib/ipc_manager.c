@@ -106,19 +106,38 @@ struct msgbuff receive_message(char *filename,long msg_type){
 	return message;
 }
 
-
 int create_msgq(char *filename){
     key_t key;
     key=ftok(filename,MESSAGE_QUEUE);
     return msgget(key, 0644| IPC_CREAT); 
 }
+
 int get_msgq(char *filename){
 	key_t key;
 	key=ftok(filename,MESSAGE_QUEUE);
+	//int msgid = msgget(key, 0666 | IPC_CREAT);
 	return msgget(key,0);
 }
+
 int destroy_msgq(char *filename){
 	int msgq_id=get_msgq(filename);
 	return msgctl(msgq_id,IPC_RMID,NULL);
 }
 
+// !! testing 
+int check_msgq(char *filename){
+    int msgid = create_msgq(filename);
+    if (msgid == -1) {
+        perror("Errore nell'ottenere l'ID della coda di messaggi");
+        exit(EXIT_FAILURE);
+    }
+
+	struct msqid_ds buf;
+    if (msgctl(msgid, IPC_STAT, &buf) == -1) {
+        perror("Errore nell'ottenere le informazioni sulla coda di messaggi");
+        exit(EXIT_FAILURE);
+    }
+
+	// Controlla il numero di messaggi nella coda di messaggi
+    return buf.msg_qnum;
+}
