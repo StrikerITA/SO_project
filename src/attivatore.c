@@ -5,12 +5,15 @@
 #include "lib/utils.h"
 #define PATHNAME "Makefile"
 
+static void sigHandler(int signum);
+
 int main(int argc, char * argv[]){
 	srand(getpid());
 	int numero=argc;
 	int sem_id=sem_get(PATHNAME);
 	char *values=argv[0];
     int num_atomi_nuovi=atoi(argv[1]);
+	signal(SIGINT,sigHandler);
 	
 	statistic *stats=attach_memory_block(PATHNAME);
 	
@@ -61,4 +64,14 @@ int main(int argc, char * argv[]){
 	}
 	
 	//dprintf(1,"[DATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
+}
+
+
+static void sigHandler(int signum){
+	if(signum==SIGTERM){
+#ifdef DEBUG
+	dprintf(1,YEL"[DATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n"RESET,getpid());
+#endif
+		exit(EXIT_SUCCESS);
+	}
 }

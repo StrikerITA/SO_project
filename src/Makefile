@@ -1,6 +1,10 @@
 CFLAGS= -Wvla -Wextra -Werror -D_GNU_SOURCE
 DEPENDENCIES=lib/ipc_manager.c lib/read_settings.c lib/utils.c
 
+BINARY= master.out atom.out alimentatore.out attivatore.out inibitore.out
+
+
+
 all: master atom alimentatore attivatore inibitore
 
 master:
@@ -33,3 +37,5 @@ dinibitore:
 
 clear: 
 	rm *.out
+
+

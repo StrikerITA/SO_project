@@ -25,7 +25,11 @@ int sem_reserve(int sem_id, sem_types sem_num) {
 	sops.sem_num = sem_num;
 	sops.sem_op = -1;
 	sops.sem_flg = 0;
-	return semop(sem_id, &sops, 1);
+	int ret=semop(sem_id, &sops, 1);
+	/*if( errno==EINTR){
+		ret=sem_reserve(sem_id,sem_num);
+	}*/
+	return ret;
 }
 
 int sem_release(int sem_id, sem_types sem_num, int num_resources) {
@@ -33,14 +37,22 @@ int sem_release(int sem_id, sem_types sem_num, int num_resources) {
 	sops.sem_num = sem_num;
 	sops.sem_op = num_resources;
 	sops.sem_flg = 0;
-	return semop(sem_id, &sops, 1);
+	int ret=semop(sem_id, &sops, 1);
+	/*if( errno==EINTR){
+		ret=sem_release(sem_id,sem_num);
+	}*/
+	return ret;
 }
 int wait_to_zero(int sem_id,sem_types sem_num){
 	struct sembuf sops;
 	sops.sem_num=sem_num;
 	sops.sem_op=0;
 	sops.sem_flg=0;
-	return semop(sem_id,&sops,1);
+	int ret= semop(sem_id,&sops,1);
+	/*if( errno==EINTR){
+		ret=wait_to_zero(sem_id,sem_num);
+	}*/
+	return ret;
 }
 
 //-------------------------------------------------
@@ -86,14 +98,15 @@ bool destroy_memory_block(char *filename){
 //---------------MESSAGE-QUEUE---------------
 
 
-int send_message(char *filename,int type,int info){
+int send_message(char *filename,int type,int sonoScoria,int energiaLiberata){
 	struct msgbuff message;
 	message.msg_type=type;
 	message.my_pid=getpid();
-	message.info=info;
+	message.sonoScoria=sonoScoria;
+	message.energiaLiberata=energiaLiberata;
 	int msgq_id=get_msgq(filename);
 	
-	int ris=msgsnd(msgq_id,&message,(sizeof(int)+sizeof(pid_t)),0);
+	int ris=msgsnd(msgq_id,&message,(2*sizeof(int)+sizeof(pid_t)),0);
 	//gestione errori
 	return ris;	
 }
@@ -101,7 +114,7 @@ int send_message(char *filename,int type,int info){
 struct msgbuff receive_message(char *filename,long msg_type){
 	struct msgbuff message;
 	int msgq_id=get_msgq(filename);
-	msgrcv(msgq_id,&message,(sizeof(int)+sizeof(pid_t)),msg_type,0);
+	msgrcv(msgq_id,&message,(2*sizeof(int)+sizeof(pid_t)),msg_type,0);
 	//gestione errori
 	return message;
 }
@@ -109,7 +122,7 @@ struct msgbuff receive_message(char *filename,long msg_type){
 int create_msgq(char *filename){
     key_t key;
     key=ftok(filename,MESSAGE_QUEUE);
-    return msgget(key, 0644| IPC_CREAT); 
+    return msgget(key, 0644| IPC_CREAT|IPC_EXCL); 
 }
 
 int get_msgq(char *filename){
@@ -126,7 +139,7 @@ int destroy_msgq(char *filename){
 
 // !! testing 
 int check_msgq(char *filename){
-    int msgid = create_msgq(filename);
+    int msgid = get_msgq(filename);
     if (msgid == -1) {
         perror("Errore nell'ottenere l'ID della coda di messaggi");
         exit(EXIT_FAILURE);

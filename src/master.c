@@ -4,6 +4,7 @@
 #include <string.h>
 #include <signal.h>
 #include <errno.h>
+//include <conio.h>
 
 #define PATHNAME "Makefile"
 int inib_yes_no();
@@ -18,7 +19,6 @@ pid_t alimentatore, inibitore;
 int inib_flag=-1;
 
 int main(int argc, char * argv[]){
-
 	// Scegli se attivare inibitore
 	inib_flag = inib_yes_no();
 
@@ -247,12 +247,14 @@ void end_print(){
 		"Quantita energia prodotta: \t%10d\n"
 		"Quantita energia consumata: \t%10d\n"
 		"Numero scorie totali: \t\t%10d\n"
+		"Quantita energia assorbita: \t%10d\n"
 		"==========================================\n\n"RESET,
 		stats->n_attivazioni_tot,
 		stats->n_scissioni_tot,
 		stats->q_energia_prodotta_tot,
 		stats->q_energia_consumata_tot,
-		stats->n_scorie_tot
+		stats->n_scorie_tot,
+		stats->q_energia_assorbita
 	);
 }
 void print_stats(statistic *stats){
@@ -268,6 +270,7 @@ void print_stats(statistic *stats){
 		"Quantita energia consumata al secondo: \t%10d\n"
 		"Numero scorie totali: \t\t\t%10d\n"
 		"Numero scorie nel ultimo secondo: \t%10d\n"
+		"Quantita energia assorbita: \t\t%10d\n"
 		"==================================================\n\n"RESET,
 		stats->n_attivazioni_tot,
 		stats->n_attivazioni_sec,
@@ -278,7 +281,8 @@ void print_stats(statistic *stats){
 		stats->q_energia_consumata_tot,
 		stats->q_energia_consumata_sec,
 		stats->n_scorie_tot,
-		stats->n_scorie_sec
+		stats->n_scorie_sec,
+		stats->q_energia_assorbita
 	);
 }
 
@@ -333,19 +337,20 @@ static void sigHandler(int signum){
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGINT:
+			dprintf(1,"[Master] Attivo/disattivo inibitore");
 			// verifica esistenza coda di messaggi
-			test = get_msgq(PATHNAME);
+			/*test = get_msgq(PATHNAME);
 			dprintf(1, RED"msgq = %d, error %d\n", test, errno);
 			if (errno==ENOENT){
 				// coda msg F -> creo la coda di msg e invio il segnale SIGUSR1
 				create_msgq(PATHNAME);
 				dprintf(1,GRN"[MASTER]Inibitore attivato\n"RESET);
-				kill(inibitore, SIGUSR1);
+				//kill(inibitore, SIGUSR1);
 			}else{
 				// coda msg Y -> distruggo la coda msg
 				dprintf(1,GRN"[MASTER]Inibitore disattivato\n"RESET);
 				destroy_msgq(PATHNAME);
-			}
+			}*/
 			break;
 		default:
 			end();

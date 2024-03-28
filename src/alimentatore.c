@@ -34,6 +34,7 @@ int main(int argc, char * argv[]){
 	int num_atomic;
 
 	signal(SIGTERM,sigHandler);
+	signal(SIGINT,sigHandler);
 	struct timespec my_time;
 	
 	sem_reserve(sem_id,SEM_READY);

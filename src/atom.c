@@ -8,24 +8,27 @@
 
 int energy(int n1, int n2);
 int max(int n1, int n2);
+int isActivated=0;
+static void sigHandler(int signum);
 
 int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
 	//TODO: mettere if per argc
 	
+	signal(SIGINT,NULL);
 	int numero=argc;
 	int num_atomic=atoi(argv[1]);
 	int min_numero_atomico=atoi(argv[2]);
 	pid_t master_pid=atoi(argv[3]);
 	int first_atom=atoi(argv[4]);
 	int energy_explode_threshold = atoi(argv[5]);
-	//dprintf(1,"%d",first_atom);
-	/*dprintf(1,"%s\n",argv[0]);
-	dprintf(1,"%s\n",argv[1]);
-	dprintf(1,"[ATOMO]L'atomo %d e stato creato\n",getpid());*/
 	
 	statistic *stats=attach_memory_block(PATHNAME);
-	
+	if(get_msgq(PATHNAME)==-1){
+		isActivated=0;
+	}else{
+		isActivated=1;
+	}
 	//Variabili necessare per scissione
 	pid_t atomo;
 	char process_name[20];
@@ -60,6 +63,7 @@ int main(int argc, char * argv[]){
 	int num_atomic_figlio;
 	int energia_liberata;
 	int new_num_atom=-1;
+	struct msgbuff message;
 
 	while(true){
 		//Chiedo scissione
@@ -67,6 +71,8 @@ int main(int argc, char * argv[]){
 
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
+		}else if(errno==EINTR){
+			continue;
 		}
 		//...Verificare se e scoria
 		if(num_atomic < min_numero_atomico){
@@ -118,6 +124,29 @@ int main(int argc, char * argv[]){
 #ifdef DEBUG 
 	dprintf(1,YEL"[DATOM] Ho fatto la scissione\n"RESET);
 #endif
+		//dprintf(1,"[ATOMO]%d \n",isActivated);
+		if(isActivated){
+			send_message(PATHNAME,1,-1,energia_liberata);
+			message= receive_message(PATHNAME,getpid());
+			energia_liberata=energia_liberata-message.energiaLiberata;
+			if(message.sonoScoria==1){
+				sem_reserve(sem_id,SEM_STATS);
+				if(errno==EIDRM ||errno==EINVAL){
+					exit(EXIT_SUCCESS);
+				}
+				//carico dati energia liberata
+				stats->q_energia_prodotta_sec+=energia_liberata;
+				stats->q_energia_prodotta_tot+=energia_liberata;
+				stats->n_scorie_sec++;
+				stats->n_scorie_tot++;
+				sem_release(sem_id,SEM_STATS,1);
+				if(errno==EIDRM ||errno==EINVAL){
+					exit(EXIT_SUCCESS);
+				}
+				exit(EXIT_SUCCESS);
+			}
+
+		}
 
 		sem_reserve(sem_id,SEM_STATS);
 		if(errno==EIDRM ||errno==EINVAL){
@@ -150,6 +179,19 @@ int main(int argc, char * argv[]){
 	//dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
 
 }
+
+static void sigHandler(int signum){
+	if(signum==SIGINT){
+		if(isActivated==1){
+			isActivated=0;
+			dprintf(1,"[ATOMO]Coda di messaggi Disattivata\n");
+		}else if(isActivated==0){
+			isActivated=1;
+			dprintf(1,"[ATOMO]Coda di messaggi Attivata\n");
+		}
+	}
+}
+
 
 int energy(int n1, int n2){	
 	int n=n1*n2;

@@ -65,10 +65,11 @@ struct msgbuff{
 		Se msgType >2(pid processo richiedente) allora info sara 0/1 oppure
 		sara energia liberata inibita
 	*/
-	int info;	
+	int sonoScoria;	
+	int energiaLiberata;
 };
 
-int send_message(char *filename,int type,int info);
+int send_message(char *filename,int type,int sonoScoria,int energiaLiberata);
 struct msgbuff receive_message(char *filename,long msg_type);
 int create_msgq(char *filename);
 int get_msgq(char *filename);
