@@ -3,8 +3,6 @@
 int sem_create(char *pathname){
 	key_t key;
 	key=ftok(pathname,SEMAPHORE);
-
-	
 	return semget(key,NUMBER_SEMAPHORES,IPC_CREAT| 0666| IPC_EXCL);
 }
 int sem_destroy(char *pathname){
@@ -26,9 +24,6 @@ int sem_reserve(int sem_id, sem_types sem_num) {
 	sops.sem_op = -1;
 	sops.sem_flg = 0;
 	int ret=semop(sem_id, &sops, 1);
-	/*if( errno==EINTR){
-		ret=sem_reserve(sem_id,sem_num);
-	}*/
 	return ret;
 }
 
@@ -38,9 +33,6 @@ int sem_release(int sem_id, sem_types sem_num, int num_resources) {
 	sops.sem_op = num_resources;
 	sops.sem_flg = 0;
 	int ret=semop(sem_id, &sops, 1);
-	/*if( errno==EINTR){
-		ret=sem_release(sem_id,sem_num);
-	}*/
 	return ret;
 }
 int wait_to_zero(int sem_id,sem_types sem_num){
@@ -49,9 +41,6 @@ int wait_to_zero(int sem_id,sem_types sem_num){
 	sops.sem_op=0;
 	sops.sem_flg=0;
 	int ret= semop(sem_id,&sops,1);
-	/*if( errno==EINTR){
-		ret=wait_to_zero(sem_id,sem_num);
-	}*/
 	return ret;
 }
 
@@ -72,17 +61,14 @@ int create_shmem(char *filename){
 }
 
 statistic * attach_memory_block(char *filename){
-
     int shared_block_id=get_shmem(filename);
     statistic *result;
     result =shmat(shared_block_id,NULL,0);
-	//TODO:Gestione errori
     return result;
 }
 
 bool detach_memory_block(statistic *block){
     return(shmdt(block)!=IPC_RESULT_ERROR);
-	//TODO:Gestione errori
 }
 
 bool destroy_memory_block(char *filename){
@@ -90,7 +76,6 @@ bool destroy_memory_block(char *filename){
     if(shared_block_id==IPC_RESULT_ERROR){
         return NULL;
     }
-
     return(shmctl(shared_block_id,IPC_RMID,NULL)!= IPC_RESULT_ERROR);
 }
 
@@ -107,7 +92,6 @@ int send_message(char *filename,int type,int sonoScoria,int energiaLiberata){
 	int msgq_id=get_msgq(filename);
 	
 	int ris=msgsnd(msgq_id,&message,(2*sizeof(int)+sizeof(pid_t)),0);
-	//gestione errori
 	return ris;	
 }
 
@@ -115,7 +99,6 @@ struct msgbuff receive_message(char *filename,long msg_type){
 	struct msgbuff message;
 	int msgq_id=get_msgq(filename);
 	msgrcv(msgq_id,&message,(2*sizeof(int)+sizeof(pid_t)),msg_type,0);
-	//gestione errori
 	return message;
 }
 
@@ -128,29 +111,10 @@ int create_msgq(char *filename){
 int get_msgq(char *filename){
 	key_t key;
 	key=ftok(filename,MESSAGE_QUEUE);
-	//int msgid = msgget(key, 0666 | IPC_CREAT);
 	return msgget(key,0);
 }
 
 int destroy_msgq(char *filename){
 	int msgq_id=get_msgq(filename);
 	return msgctl(msgq_id,IPC_RMID,NULL);
-}
-
-// !! testing 
-int check_msgq(char *filename){
-    int msgid = get_msgq(filename);
-    if (msgid == -1) {
-        perror("Errore nell'ottenere l'ID della coda di messaggi");
-        exit(EXIT_FAILURE);
-    }
-
-	struct msqid_ds buf;
-    if (msgctl(msgid, IPC_STAT, &buf) == -1) {
-        perror("Errore nell'ottenere le informazioni sulla coda di messaggi");
-        exit(EXIT_FAILURE);
-    }
-
-	// Controlla il numero di messaggi nella coda di messaggi
-    return buf.msg_qnum;
 }

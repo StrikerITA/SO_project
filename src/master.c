@@ -4,7 +4,6 @@
 #include <string.h>
 #include <signal.h>
 #include <errno.h>
-//include <conio.h>
 
 #define PATHNAME "Makefile"
 int inib_yes_no();
@@ -171,22 +170,15 @@ int main(int argc, char * argv[]){
 	}
 
 	sem_reserve(sem_id,SEM_READY);
-	/*f(errno==EIDRM ||errno==EINVAL){
-		exit(EXIT_SUCCESS);
-	}*/
 	
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER] Aspetto avvio simulazione\n"RESET);
 #endif
 	wait_to_zero(sem_id,SEM_READY);
-	/*if(errno==EIDRM ||errno==EINVAL){
-		exit(EXIT_SUCCESS);
-	}*/
 	alarm(settings.sim_duration);
 #ifdef DEBUG
 	dprintf(1,YEL"[DMASTER]La simulazione e iniziata\n");
 #endif
-	//todo: da modificare energia disponibile
 	int energia_disponibile = 0;
 	int energia_liberata = 0;
 

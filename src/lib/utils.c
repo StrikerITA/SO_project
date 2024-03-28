@@ -42,38 +42,4 @@ int num_atom_generator(int min, int max){
 
 int num_atom_generator_v2(int num){
 	return num & rand_generator(10,100);
-	/*if(rand_num <= max/2){
-		return rand_num * rand_generator(15, 40);
-	}else{
-		return rand_num * rand_generator(3,15);
-	}*/
 }
-
-
-
-
-// #include <stdio.h>
-// #include <unistd.h>
-// #include <poll.h>
-
-// int main(){
-
-//     struct pollfd stdin_fd = { .fd = 0, .events = POLLIN };
-//     while (1) {
-//         dprintf(1, "suka\n");
-//         sleep(1);
-//         if (poll(&stdin_fd, 1, 0) > 0) {
-//             if (stdin_fd.revents & POLLIN) {
-//                 char input;
-//                 read(0, &input, 1);
-//                 printf("Hai premuto il tasto '%c'\n", input);
-//                 if (input == 'q') {
-//                     printf("Hai premuto 'q'. Uscita dal programma.\n");
-//                     break;
-//                 }
-//             }
-//         }
-//     }
-
-//     return 0;
-// }

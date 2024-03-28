@@ -12,7 +12,9 @@ static void sigHandler(int signum);
 
 int main(int argc, char * argv[]){
 	srand(getpid());
-	int numero=argc;
+	if (argc < 7){
+		dprintf(1, RED"[ALIMENTATORE] argc = %d \n", argc);
+	}
 	int sem_id=sem_get(PATHNAME);
 
 	int step=atoi(argv[1]);

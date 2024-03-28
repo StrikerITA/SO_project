@@ -13,7 +13,11 @@ static void sigHandler(int signum);
 
 int main(int argc, char * argv[]){
 	int sem_id=sem_get(PATHNAME);
-	//TODO: mettere if per argc
+
+	if (argc < 6){
+		dprintf(1, RED"Non ci sono abbastanza parametri nell'atomo\n");
+		exit(EXIT_FAILURE);
+	}
 	
 	signal(SIGINT,NULL);
 	int numero=argc;
@@ -47,7 +51,6 @@ int main(int argc, char * argv[]){
 	//Finite preparazioni
 	if(first_atom==1){
 	sem_reserve(sem_id,SEM_READY);
-	//dprintf(1,"[ATOMO]Ho prelevato 1 r\n");
 		if(errno==EIDRM ||errno==EINVAL){
 			exit(EXIT_SUCCESS);
 		}
@@ -88,16 +91,9 @@ int main(int argc, char * argv[]){
 			}
 			exit(EXIT_SUCCESS);
 		}
-#ifdef DEBUG
-#endif
 		//Calcolo num atomico
 		num_atomic_figlio = rand_generator(1, num_atomic-1);
 		new_num_atom=num_atomic-num_atomic_figlio;
-#ifdef DEBUG
-	//dprintf(1,"[ATOMO-DEBUG]Num_atomic: %d,New_num_atom:%d, Num_atomic_figlio: %d\n",num_atomic,new_num_atom,num_atomic_figlio);
-
-	///dprintf(1,"[ATOMO-DEBUG]Num: %d\n",energia_liberata);
-#endif
 		num_atomic=new_num_atom;
 		//Calcolo energia liberata energy(n1,n2) = n1 * n2 - max(n1 | n2)
 		energia_liberata = energy(num_atomic, num_atomic_figlio);
@@ -124,7 +120,6 @@ int main(int argc, char * argv[]){
 #ifdef DEBUG 
 	dprintf(1,YEL"[DATOM] Ho fatto la scissione\n"RESET);
 #endif
-		//dprintf(1,"[ATOMO]%d \n",isActivated);
 		if(isActivated){
 			send_message(PATHNAME,1,-1,energia_liberata);
 			message= receive_message(PATHNAME,getpid());
@@ -175,9 +170,6 @@ int main(int argc, char * argv[]){
 	}
 
 	detach_memory_block(stats);
-	
-	//dprintf(1,"[ATOMO]L'atomo %d ha finito la sua esecuzione\n",getpid());
-
 }
 
 static void sigHandler(int signum){

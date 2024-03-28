@@ -9,9 +9,11 @@ static void sigHandler(int signum);
 
 int main(int argc, char * argv[]){
 	srand(getpid());
-	int numero=argc;
+	if (argc < 2){
+		dprintf(1, RED"[ATTIVATORE] argc = %d \n", argc);
+	}
+	
 	int sem_id=sem_get(PATHNAME);
-	char *values=argv[0];
     int num_atomi_nuovi=atoi(argv[1]);
 	signal(SIGINT,sigHandler);
 	
@@ -29,9 +31,6 @@ int main(int argc, char * argv[]){
 	if(errno==EIDRM ||errno==EINVAL){
 		exit(EXIT_SUCCESS);
 	}
-
-
-	
 
 	int numero_attivazioni=-1;
 	while(true){
@@ -62,10 +61,7 @@ int main(int argc, char * argv[]){
 			exit(EXIT_SUCCESS);
 		}
 	}
-	
-	//dprintf(1,"[DATTIVATORE]L'alimentatore %d ha finito la sua esecuzione\n",getpid());
 }
-
 
 static void sigHandler(int signum){
 	if(signum==SIGTERM){

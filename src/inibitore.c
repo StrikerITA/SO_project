@@ -6,16 +6,18 @@
 #include <errno.h>
 
 #define PATHNAME "Makefile"
+FILE* f_logs;
 
 int rand_split();
 static void sigHandler(int signum);
 int rand_energy(int energy_raw);
 
-int isActivated;
+int isActivated = 1;
 
-int main(int argc, char *argv[]){
+int main(){
+	f_logs = fopen("logs.txt", "w"); //opening file for write 
 	srand(getpid());
-	// filtrare errori argv
+
 	int msgq_id=get_msgq(PATHNAME);
 	int sem_id=sem_get(PATHNAME);
 	statistic *stats=attach_memory_block(PATHNAME);
@@ -29,7 +31,7 @@ int main(int argc, char *argv[]){
 	int type;
 	pid_t pid;
 	int sono_scoria;
-	int energia_liberata;
+	int energia_assorbita;
 
 	sem_reserve(sem_id,SEM_READY);	
 	if(errno==EIDRM ||errno==EINVAL){
@@ -50,32 +52,37 @@ int main(int argc, char *argv[]){
 		message=receive_message(PATHNAME,1);
 		if(isActivated){
 			// info della risposta sarà (0/1)
+			
 			//DONE:funzione che determina se scinde o meno
 			sono_scoria=rand_split();
+			
 			//DONE:funzione che determina quanta energia assorbire
-			energia_liberata=rand_energy(message.energiaLiberata);
+			energia_assorbita=rand_energy(message.energiaLiberata);
 			type=message.my_pid;
-			send_message(PATHNAME,type,sono_scoria,energia_liberata);
+			send_message(PATHNAME,type,sono_scoria,energia_assorbita);
 			
 			sem_reserve(sem_id,SEM_STATS);
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}
-			stats->q_energia_assorbita+=energia_liberata;		
+
+			stats->q_energia_assorbita+=energia_assorbita;
 			sem_release(sem_id,SEM_STATS,1);
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}
+			if (sono_scoria){
+				fprintf(f_logs, "Aumento di 1 il numero di scorie\n");
+			}
+			fprintf(f_logs, "Ho assorbito %d energia\n", energia_assorbita);
 		}else{
 			sono_scoria=0;
 			//DONE:funzione che determina quanta energia assorbire
-			energia_liberata=0;
+			energia_assorbita=0;
 			type=message.my_pid;
-			send_message(PATHNAME,type,sono_scoria,energia_liberata);
-			
+			send_message(PATHNAME,type,sono_scoria,energia_assorbita);	
 		}
 	}
-
 }
 
 int rand_split(){
@@ -98,15 +105,21 @@ static void sigHandler(int signum){
 #ifdef DEBUG
 	dprintf(1,YEL"[DINIBITORE]L'inibitore %d ha finito la sua esecuzione\n"RESET,getpid());
 #endif
+		fclose(f_logs);
+		dprintf(1, BLU"I logs dell'inibitore sono in src/logs.txt\n");
 		exit(EXIT_SUCCESS);
 	}
 	if(signum==SIGINT){
 		if(isActivated==1){
+			//! inibitore disattivato
 			isActivated=0;
 			dprintf(1, "[Inibitore]Inibitore disattivato");
+			fprintf(f_logs, "Inibitore disattivato\n");
 		}else if(isActivated==0){
+			//! inibitore attivato
 			isActivated=1;
 			dprintf(1, "[Inibitore]Inibitore attivato");
+			fprintf(f_logs, "Inibitore attivato\n");
 		}
 	}
 }
