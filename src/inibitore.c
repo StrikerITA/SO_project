@@ -16,16 +16,7 @@ int isActivated;
 int main(int argc, char *argv[]){
 	srand(getpid());
 	// filtrare errori argv
-	int num_param=argc;
-	char *mia_variabile=argv[0];
-	if(get_msgq(PATHNAME)==-1){
-		isActivated=0;
-	}
-	else{
-		isActivated=1;
-	}
 	int msgq_id=get_msgq(PATHNAME);
-	dprintf(1,"[INIBITORE]accesso alla coda di messaggi con id =%d\n",msgq_id);
 	int sem_id=sem_get(PATHNAME);
 	statistic *stats=attach_memory_block(PATHNAME);
 
@@ -51,30 +42,19 @@ int main(int argc, char *argv[]){
 	
 	while(true){
 		//ricezione messaggio
-		//dprintf(1,"coda\n");
-
-		//dprintf(1, "num msg: %d", check_msgq(PATHNAME));
-		//!! si blocca in ricezione del messaggio
-
-		//sleep(1);
  		msgq_id=get_msgq(PATHNAME);
- 		//dprintf(1,"[INIBITORE] Coda di messaggi id %d\n",msgq_id);
-		// se ci sono messaggi nella coda, accede
-		//if (check_msgq(PATHNAME) > 0){
-			errno=0;
+#ifdef DEBUG
+	dprintf(1,YEL"[DINIBITORE] Coda di messaggi id %d\n",msgq_id);
+#endif
+		errno=0;
 		message=receive_message(PATHNAME,1);
-		if( errno==EINTR){
-			//dprintf(1," my errno %d\n",errno);
-			continue;
-		}
 		if(isActivated){
-			// info della risposta sara (0/1)
+			// info della risposta sarà (0/1)
 			//DONE:funzione che determina se scinde o meno
 			sono_scoria=rand_split();
 			//DONE:funzione che determina quanta energia assorbire
 			energia_liberata=rand_energy(message.energiaLiberata);
 			type=message.my_pid;
-			//dprintf(1,"%d %d \n",sono_scoria,energia_liberata);
 			send_message(PATHNAME,type,sono_scoria,energia_liberata);
 			
 			sem_reserve(sem_id,SEM_STATS);
@@ -86,13 +66,6 @@ int main(int argc, char *argv[]){
 			if(errno==EIDRM ||errno==EINVAL){
 				exit(EXIT_SUCCESS);
 			}
-			if(errno==EIDRM ||errno==EINVAL){
-				/*dprintf(1,"Vado in wait()");
-				wait(NULL);
-				dprintf(1,"Esco dalla wait in wait()");
-				msgq_id=get_msgq(PATHNAME);*/
-				continue;
-			}
 		}else{
 			sono_scoria=0;
 			//DONE:funzione che determina quanta energia assorbire
@@ -101,27 +74,6 @@ int main(int argc, char *argv[]){
 			send_message(PATHNAME,type,sono_scoria,energia_liberata);
 			
 		}
-		//dprintf(1,"[INIBITORE]isScoria %d,Energia assorbita=%d\n",sono_scoria,energia_liberata);
-		//}else{
-			//mando l'inibitore in wait
-			//errno = ENOMSG; // TEST
-		//}
-
-		//TODO
-		/*
-			Atomi guardano un semaforo che viene aggiornato dal master 
-			per capire se usare o meno l'inibitore
-
-			l'inibitore non distrugge la coda dei messaggi
-			la puliamo mentre gli atomi non usano l'inibitore
-		*/
-		
-		
-		
-		
-			
-		
-		
 	}
 
 }
@@ -151,10 +103,10 @@ static void sigHandler(int signum){
 	if(signum==SIGINT){
 		if(isActivated==1){
 			isActivated=0;
-			dprintf(1,"[Inibitore]Coda di messaggi Disattivata\n");
+			dprintf(1, "[Inibitore]Inibitore disattivato");
 		}else if(isActivated==0){
 			isActivated=1;
-			dprintf(1,"[Inibitore]Coda di messaggi Attivata\n");
+			dprintf(1, "[Inibitore]Inibitore attivato");
 		}
 	}
 }

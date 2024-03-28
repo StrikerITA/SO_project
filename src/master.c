@@ -65,8 +65,6 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Creata memoria condivisa con id %d\n"RESET,shmem_id);
 #endif
 
-
-
 	//Si attacca alla memoria condivisa, e inizializza le statistiche a zero
 	statistic *stats=attach_memory_block(PATHNAME);
 	bzero(stats,sizeof(statistic));
@@ -102,9 +100,9 @@ int main(int argc, char * argv[]){
 	args[1]=param1;//step
 	args[2]=param2;//n_nuovi_atomi
 	args[3]=param3;//master pid
-	args[4]=param4;
-	args[5]=param5;
-	args[6]=param6;
+	args[4]=param4;//num_atom_max
+	args[5]=param5;//min_n_atomico
+	args[6]=param6;//energy_explode_threshold
 	args[7]=NULL;
 
 	
@@ -127,7 +125,6 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Creato processo attivatore\n"RESET);
 #endif
 
-
 	//Creazione atomo
 	strcpy(process_name,"atom.out");
 	
@@ -143,7 +140,7 @@ int main(int argc, char * argv[]){
 	args[2]=param2;//min numero atomico
 	args[3]=param3;//pid master
 	args[4]=param4;//first_atom
-	args[5]=param5;
+	args[5]=param5;//energy_explode_threshold
 	args[6]=NULL;
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
@@ -186,7 +183,9 @@ int main(int argc, char * argv[]){
 		exit(EXIT_SUCCESS);
 	}*/
 	alarm(settings.sim_duration);
-	dprintf(1,"La simulazione e iniziata\n");
+#ifdef DEBUG
+	dprintf(1,YEL"[DMASTER]La simulazione e iniziata\n");
+#endif
 	//todo: da modificare energia disponibile
 	int energia_disponibile = 0;
 	int energia_liberata = 0;
@@ -200,9 +199,6 @@ int main(int argc, char * argv[]){
 	dprintf(1,YEL"[DMASTER]Richiedo 1 risorsa a SEM_STAT\n"RESET);
 #endif
 		sem_reserve(sem_id,SEM_STATS);
-		/*if(errno==EIDRM ||errno==EINVAL){
-			exit(EXIT_SUCCESS);
-		}*/
 		energia_disponibile=stats->q_energia_prodotta_tot - stats->q_energia_consumata_tot;
 		
 #ifdef DEBUG 
@@ -220,13 +216,9 @@ int main(int argc, char * argv[]){
 		stat_reset(stats);
 
 		sem_release(sem_id,SEM_STATS,1);
-		/*if(errno==EIDRM ||errno==EINVAL){
-			exit(EXIT_SUCCESS);
-		}*/
 #ifdef DEBUG 
 	dprintf(1,YEL"[DMASTER]Rilascio 1 risorsa a SEM_STAT\n"RESET);
 #endif
-
 	}
 	end();
 }
@@ -311,7 +303,6 @@ void end(){
 #ifdef DEBUG
 	dprintf(1,YEL"[DMASTER]Distrutta coda di messaggi\n"RESET);
 #endif
-
 	}
 #ifdef DEBUG
 	dprintf(1,YEL"[DMASTER]Coda di messaggi distrutta\n"RESET);
@@ -337,20 +328,7 @@ static void sigHandler(int signum){
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGINT:
-			dprintf(1,"[Master] Attivo/disattivo inibitore");
-			// verifica esistenza coda di messaggi
-			/*test = get_msgq(PATHNAME);
-			dprintf(1, RED"msgq = %d, error %d\n", test, errno);
-			if (errno==ENOENT){
-				// coda msg F -> creo la coda di msg e invio il segnale SIGUSR1
-				create_msgq(PATHNAME);
-				dprintf(1,GRN"[MASTER]Inibitore attivato\n"RESET);
-				//kill(inibitore, SIGUSR1);
-			}else{
-				// coda msg Y -> distruggo la coda msg
-				dprintf(1,GRN"[MASTER]Inibitore disattivato\n"RESET);
-				destroy_msgq(PATHNAME);
-			}*/
+			//dprintf(1,"[Master] Attivo/disattivo inibitore");
 			break;
 		default:
 			end();
@@ -360,7 +338,6 @@ static void sigHandler(int signum){
 	}
 }
 
-
 int inib_yes_no(){
 	int flag = 1;
 	int res;
@@ -368,7 +345,6 @@ int inib_yes_no(){
 	while(flag){
 		if(my_char != '\n')
 			dprintf(1, "[MASTER]Vuoi attivare il processo inibitore? [Y/n]\n");
-
 		scanf("%c",&my_char);
 		if(my_char == 'Y' || my_char == 'y'){
 			res = 1;
