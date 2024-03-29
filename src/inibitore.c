@@ -72,8 +72,14 @@ int main(){
 				exit(EXIT_SUCCESS);
 			}
 			if (sono_scoria){
+#ifdef DEBUG
+	dprintf(1,YEL"[DINIBITORE]Il numero di scorie è aumentato di 1\n");
+#endif
 				fprintf(f_logs, "Aumento di 1 il numero di scorie\n");
 			}
+#ifdef DEBUG
+	dprintf(1,YEL"[DINIBITORE]L'inibitore ha assorbito %d energia", energia_assorbita);
+#endif
 			fprintf(f_logs, "Ho assorbito %d energia\n", energia_assorbita);
 		}else{
 			sono_scoria=0;
