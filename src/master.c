@@ -22,7 +22,7 @@ int main(int argc, char * argv[]){
 	inib_flag = inib_yes_no();
 
 	char *path;
-	srand(getpid());	
+	srand(getpid());
 	if (argc < 2){
 		path = "opt.conf";
 	}else{
@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
 	}
 
 	signal(SIGTERM,sigHandler);
-	signal(SIGALRM,sigHandler); 
+	signal(SIGALRM,sigHandler);
 	signal(SIGUSR1,sigHandler); //Explode
 	signal(SIGINT,sigHandler); //CTRL + C -> Enable/Disable Inibitore
 	
@@ -128,14 +128,12 @@ int main(int argc, char * argv[]){
 	strcpy(process_name,"atom.out");
 	
 	//TODO: da calcolare con funzione randomica
-	int num_atomic=10;
-	sprintf(param1,"%d",num_atomic);
+	int num_atomic=-1;
 	sprintf(param2,"%d",settings.min_n_atomico);
 	sprintf(param3,"%d",master);
 	sprintf(param4,"%d",1);
 	sprintf(param5,"%d",settings.energy_explode_threshold);
 	args[0]=process_name;//
-	args[1]=param1;//numero atomico
 	args[2]=param2;//min numero atomico
 	args[3]=param3;//pid master
 	args[4]=param4;//first_atom
@@ -144,8 +142,8 @@ int main(int argc, char * argv[]){
 	atomo=1;
 	for(int i=0;i<settings.n_atom_init && atomo>0;i++){
 		num_atomic=rand_generator(1, settings.n_atom_max);
-		args[1]=param1;
 		sprintf(param1,"%d",num_atomic);
+		args[1]=param1;
 		atomo=create_process(process_name,args,master);
 
 	}

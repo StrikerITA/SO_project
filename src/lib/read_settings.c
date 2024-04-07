@@ -170,8 +170,6 @@ int isNegORLong(int sett){
 
 void move(){
 	getToken();
-
-	//printf("token = %d\n",tok.tag);
 }
 
 void match(tokens_tags tt){
@@ -308,7 +306,6 @@ void setToken(tokens_tags tt,char *lexemma){
 
 char readch(){
 	char ch=(char) fgetc(configFile);
-	//printf("Ho letto %c\n",ch);
 	return ch;
 }
 
@@ -320,13 +317,10 @@ void getToken(){
 		peek=readch();
 	}
 	switch(peek){
-		case '#'://E un commento
+		case '#':
 			while(peek != '\n'&& peek!=(char)-1){
 				peek=readch();
 			}
-			/*if(peek=='\n'){
-				linea++;
-			}*/
 			getToken();
 			break; 
 		case '=':
@@ -393,18 +387,3 @@ void getToken(){
 		}
 	}
 }
-
-//***********************************************************
-//UTILITY
-/*
-La funzione restituisce 1 se la stringa inserita e un numero 
-Altrimenti restituisce 0
-*/
-/*
-int isNumber(char s[]){
-    for (int i = 0; s[i]!= '\0'; i++){
-        if(isdigit(s[i]) == 0)
-              return 0;
-    }
-    return 1;
-}*/

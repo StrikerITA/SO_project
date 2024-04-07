@@ -5,6 +5,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/types.h>
 
 int num_atom_generator(int min, int max);
 int num_atom_generator_v2(int num);

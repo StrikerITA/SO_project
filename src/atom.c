@@ -132,6 +132,13 @@ int main(int argc, char * argv[]){
 				//carico dati energia liberata
 				stats->q_energia_prodotta_sec+=energia_liberata;
 				stats->q_energia_prodotta_tot+=energia_liberata;
+				if (stats->q_energia_prodotta_tot > energy_explode_threshold){
+#ifdef DEBUG
+		dprintf(1,RED"[DATOM]Genero errore explode\n"RESET);
+#endif
+					kill(master_pid,SIGUSR1);
+					exit(EXIT_SUCCESS);
+				}
 				stats->n_scorie_sec++;
 				stats->n_scorie_tot++;
 				sem_release(sem_id,SEM_STATS,1);
@@ -168,22 +175,7 @@ int main(int argc, char * argv[]){
 			exit(EXIT_SUCCESS);
 		}
 	}
-
-	detach_memory_block(stats);
 }
-
-static void sigHandler(int signum){
-	if(signum==SIGINT){
-		if(isActivated==1){
-			isActivated=0;
-			dprintf(1,"[ATOMO]Coda di messaggi Disattivata\n");
-		}else if(isActivated==0){
-			isActivated=1;
-			dprintf(1,"[ATOMO]Coda di messaggi Attivata\n");
-		}
-	}
-}
-
 
 int energy(int n1, int n2){	
 	int n=n1*n2;

@@ -8,7 +8,7 @@ BINARY= master.out atom.out alimentatore.out attivatore.out inibitore.out
 all: master atom alimentatore attivatore inibitore
 
 master:
-	gcc $(CFLAGS) master.c $(DEPENDENCIES)  -o master.out 
+	gcc $(CFLAGS) master.c $(DEPENDENCIES)   -o master.out 
 atom:
 	gcc $(CFLAGS) atom.c $(DEPENDENCIES) -o atom.out 
 alimentatore:
