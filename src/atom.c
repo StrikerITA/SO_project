@@ -155,6 +155,10 @@ int main(int argc, char * argv[]){
 			exit(EXIT_SUCCESS);
 		}
 
+		//carico i dati dentro le stats
+		stats->n_scissioni_tot++;
+		stats->n_scissioni_sec++;
+
 		//carico dati energia liberata
 		stats->q_energia_prodotta_sec+=energia_liberata;
 		stats->q_energia_prodotta_tot+=energia_liberata;
@@ -166,9 +170,6 @@ int main(int argc, char * argv[]){
 			kill(master_pid,SIGUSR1);
 			exit(EXIT_SUCCESS);
 		}
-		//carico i dati dentro le stats
-		stats->n_scissioni_tot++;
-		stats->n_scissioni_sec++;
 
 		sem_release(sem_id,SEM_STATS,1);
 		if(errno==EIDRM ||errno==EINVAL){
