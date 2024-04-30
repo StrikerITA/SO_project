@@ -120,7 +120,7 @@ static void sigHandler(int signum){
 			//! inibitore disattivato
 			isActivated=0;
 #ifdef DEBUG
-	dprintf(1,YEL"[DINIBITORE]L'inibitore %d è stato disattivato\n");
+	dprintf(1,YEL"[DINIBITORE]L'inibitore è stato disattivato\n");
 #endif
 			dprintf(1, "[Inibitore]Inibitore disattivato");
 			fprintf(f_logs, "Inibitore disattivato\n");
@@ -128,7 +128,7 @@ static void sigHandler(int signum){
 			//! inibitore attivato
 			isActivated=1;
 #ifdef DEBUG
-	dprintf(1,YEL"[DINIBITORE]L'inibitore %d è stato attivato\n");
+	dprintf(1,YEL"[DINIBITORE]L'inibitore è stato attivato\n");
 #endif
 			dprintf(1, "[Inibitore]Inibitore attivato");
 			fprintf(f_logs, "Inibitore attivato\n");
