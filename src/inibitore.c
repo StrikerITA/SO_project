@@ -53,10 +53,10 @@ int main(){
 		if(isActivated){
 			// info della risposta sarà (0/1)
 			
-			//DONE:funzione che determina se scinde o meno
+			//funzione che determina se scinde o meno
 			sono_scoria=rand_split();
 			
-			//DONE:funzione che determina quanta energia assorbire
+			//funzione che determina quanta energia assorbire
 			energia_assorbita=rand_energy(message.energiaLiberata);
 			type=message.my_pid;
 			send_message(PATHNAME,type,sono_scoria,energia_assorbita);
@@ -83,7 +83,7 @@ int main(){
 			fprintf(f_logs, "Ho assorbito %d energia\n", energia_assorbita);
 		}else{
 			sono_scoria=0;
-			//DONE:funzione che determina quanta energia assorbire
+			//funzione che determina quanta energia assorbire
 			energia_assorbita=0;
 			type=message.my_pid;
 			send_message(PATHNAME,type,sono_scoria,energia_assorbita);	
@@ -93,7 +93,7 @@ int main(){
 
 int rand_split(){
 	int res = 0;
-	int num = rand_generator(1,14); //Potrebbe cambiare
+	int num = rand_generator(1,20); //Potrebbe cambiare
 	if(num !=1){
 		res = 1; // Split
 	}
@@ -101,7 +101,7 @@ int rand_split(){
 }
 
 int rand_energy(int energy_raw){
-	return (energy_raw/100)*rand_generator(50, 90);
+	return (energy_raw/100)*rand_generator(50, 99);
 }
 
 static void sigHandler(int signum){

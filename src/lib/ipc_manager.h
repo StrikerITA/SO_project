@@ -10,8 +10,7 @@
 #include <stdbool.h>
 #include <sys/shm.h>
 #include <sys/msg.h>
-
-#define IPC_KEY_SIMULATION 34197
+#define IPC_RESULT_ERROR (-1) 
 #define NUMBER_SEMAPHORES 3
 
 //-------------------
@@ -78,19 +77,6 @@ int sem_release(int sem_id, sem_types sem_num, int num_resources);
 	@return 0 -> success or -1 + errno -> failure
 */
 int wait_to_zero(int sem_id,sem_types sem_num);
-
-//--------------------
-//Memoria condivisa
-
-#define TEST_SEM_ERROR if (errno) {             \
-                        fprintf(stderr,		\
-				       "%s:%d: PID=%5d: Error %d (%s)\n", \
-				       __FILE__,			\
-				       __LINE__,			\
-				       getpid(),			\
-				       errno,				\
-				       strerror(errno));    \
-                       }
 
 int create_shmem(char *filename);
 int get_shmem(char *filename);

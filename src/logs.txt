@@ -1,9 +1,32 @@
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 180 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 148 energia
+=======
+Ho assorbito 279 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 104 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 100 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 50 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 154 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 110 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 56 energia
+>>>>>>> Stashed changes
 Aumento di 1 il numero di scorie
 Ho assorbito 255 energia
 Aumento di 1 il numero di scorie
@@ -23,8 +46,9 @@ Ho assorbito 138 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 128 energia
 Aumento di 1 il numero di scorie
-Ho assorbito 153 energia
+Ho assorbito 85 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 340 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 244 energia
@@ -67,6 +91,10 @@ Ho assorbito 132 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 73 energia
 Aumento di 1 il numero di scorie
+=======
+Ho assorbito 75 energia
+Aumento di 1 il numero di scorie
+>>>>>>> Stashed changes
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
@@ -440,10 +468,11 @@ Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Ho assorbito 180 energia
 Aumento di 1 il numero di scorie
-Ho assorbito 219 energia
+Ho assorbito 256 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 300 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
@@ -608,10 +637,15 @@ Ho assorbito 126 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 165 energia
 Aumento di 1 il numero di scorie
+=======
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+>>>>>>> Stashed changes
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 168 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 344 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 62 energia
@@ -814,11 +848,59 @@ Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 344 energia
+=======
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 87 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 55 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 168 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 232 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 170 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 67 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 324 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+>>>>>>> Stashed changes
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 172 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 176 energia
@@ -946,12 +1028,17 @@ Ho assorbito 255 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 365 energia
 Aumento di 1 il numero di scorie
+=======
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+>>>>>>> Stashed changes
 Ho assorbito 80 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 264 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
@@ -1003,15 +1090,25 @@ Ho assorbito 250 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+=======
+>>>>>>> Stashed changes
 Ho assorbito 85 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 158 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 83 energia
+=======
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+>>>>>>> Stashed changes
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
@@ -1019,16 +1116,21 @@ Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 195 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 450 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 285 energia
+=======
+Ho assorbito 0 energia
+>>>>>>> Stashed changes
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 336 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 104 energia
@@ -1078,12 +1180,19 @@ Ho assorbito 183 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 208 energia
 Aumento di 1 il numero di scorie
+=======
+Ho assorbito 114 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+>>>>>>> Stashed changes
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 82 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 86 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 76 energia
@@ -1099,11 +1208,17 @@ Aumento di 1 il numero di scorie
 Ho assorbito 246 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 128 energia
+=======
+Ho assorbito 192 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 78 energia
+>>>>>>> Stashed changes
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
 Aumento di 1 il numero di scorie
+<<<<<<< Updated upstream
 Ho assorbito 62 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 0 energia
@@ -1113,3 +1228,464 @@ Aumento di 1 il numero di scorie
 Ho assorbito 228 energia
 Aumento di 1 il numero di scorie
 Ho assorbito 110 energia
+=======
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 69 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 84 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 120 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 180 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 110 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 64 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 87 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 112 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 190 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 415 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 97 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 146 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 196 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 216 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 72 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 98 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 75 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 240 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 53 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 86 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 81 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 87 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 90 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 82 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 279 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 52 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 92 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 93 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 90 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 67 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 294 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 95 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 249 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 68 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 192 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 81 energia
+Ho assorbito 243 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 95 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Ho assorbito 92 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 75 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 97 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 87 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+Aumento di 1 il numero di scorie
+Ho assorbito 0 energia
+>>>>>>> Stashed changes

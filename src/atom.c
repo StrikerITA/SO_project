@@ -129,6 +129,8 @@ int main(int argc, char * argv[]){
 				if(errno==EIDRM ||errno==EINVAL){
 					exit(EXIT_SUCCESS);
 				}
+				stats->n_scissioni_tot++;
+				stats->n_scissioni_sec++;
 				//carico dati energia liberata
 				stats->q_energia_prodotta_sec+=energia_liberata;
 				stats->q_energia_prodotta_tot+=energia_liberata;

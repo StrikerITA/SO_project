@@ -1,4 +1,12 @@
 //#include "util.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <string.h>
+#include "utils.h"
+#include <errno.h>
+
 
 //Max of number preferences
 #define MAX_PREFERENCES 7

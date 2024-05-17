@@ -1,11 +1,5 @@
 #include "read_settings.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <ctype.h>
-#include <string.h>
-#include "utils.h"
-#include <errno.h>
+
 
 /*Lo scopo finale di questo file e riempire questa struttura*/
 settings_info si={10,50,50,2,6,999999999,10,700000};
@@ -18,7 +12,7 @@ int linea=0;
 
 
 void make_default_settings_file(){
-	char string_default_settings[]="#prototipo di file predefinito\n"
+	char string_default_settings[]="#File con i valori predefiniti del progetto\n"
 			"#!IMPORTANTE: questo documento deve essere nella stessa cartella che il programma chiamante\n"
 			"#Quantita di energia che dovra prelevare il MASTER ogni secondo\n"
 			"ENERGY_DEMAND=10;\n"
@@ -376,7 +370,6 @@ void getToken(){
 					}else if(strcmp(lexemma,"ENERGY_EXPLODE_THRESHOLD\0")==0){
 						setToken(ENERGY_EXPLODE_THRESHOLD,lexemma);
 					}
-					
 					else{
 						setToken(ERROR,lexemma);
 						break;

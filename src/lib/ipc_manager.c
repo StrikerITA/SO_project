@@ -46,7 +46,7 @@ int wait_to_zero(int sem_id,sem_types sem_num){
 
 //-------------------------------------------------
 //-------------SHARED-MEMORY-----------
-#define IPC_RESULT_ERROR (-1) 
+
 int get_shmem(char *filename){
 	key_t key=ftok(filename,SHARED_MEMORY);
 	return shmget(key,sizeof(statistic),0);
